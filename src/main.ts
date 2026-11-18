@@ -1,5 +1,5 @@
-import './styles/main.css';
 import { SceneManager } from './game/rendering/scene-manager';
+import { MenuDiorama } from './game/rendering/menu-diorama';
 import { mountStatusPage } from './status';
 import { EditorController } from './game/editor/editor-controller';
 import { SimulationController } from './game/simulation/simulation-controller';
@@ -11,19 +11,45 @@ const canvas = document.querySelector<HTMLCanvasElement>('#factory-canvas');
 if (app && canvas) {
   try {
     let editor: EditorController | null = null;
+    let menuDiorama: MenuDiorama | null = null;
     const sceneManager = new SceneManager({
       canvas,
       selectedCellOutput: document.querySelector<HTMLOutputElement>('#selected-cell'),
-      onCellHover: (cell) => editor?.onHover(cell),
-      onCellClick: (cell) => editor?.onClick(cell),
-      onFrame: (time) => editor?.animate(time),
+      onCellHover: (cell) => {
+        if (!menuDiorama?.isActive()) editor?.onHover(cell);
+      },
+      onCellClick: (cell) => {
+        if (!menuDiorama?.isActive()) editor?.onClick(cell);
+      },
+      onFrame: (time) => {
+        if (menuDiorama?.isActive()) {
+          menuDiorama.animate(time);
+        } else {
+          editor?.animate(time);
+        }
+      },
     });
     editor = new EditorController(sceneManager);
     const simulationController = new SimulationController(sceneManager, editor);
-    const navigationController = new NavigationController(app, editor);
+    menuDiorama = new MenuDiorama(sceneManager);
+    const navigationController = new NavigationController(
+      app,
+      editor,
+      simulationController,
+      menuDiorama,
+    );
     sceneManager.start();
     mountStatusPage(app, true);
-    window.addEventListener('pagehide', () => { navigationController.dispose(); simulationController.dispose(); editor?.dispose(); sceneManager.dispose(); }, { once: true });
+    window.addEventListener(
+      'pagehide',
+      () => {
+        navigationController.dispose();
+        simulationController.dispose();
+        editor?.dispose();
+        sceneManager.dispose();
+      },
+      { once: true },
+    );
   } catch {
     mountStatusPage(app, false);
   }

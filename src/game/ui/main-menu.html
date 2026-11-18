@@ -1,18 +1,34 @@
-<div class="menu-card">
-  <p class="eyebrow" data-i18n="mainMenu.eyebrow"></p>
-  <h2 class="menu-title">SHIFTWORKS</h2>
-  <p class="menu-subtitle" data-i18n="mainMenu.subtitle"></p>
-  <div class="menu-actions">
-    <button type="button" id="menu-continue" class="btn-primary" data-i18n="mainMenu.continue"></button>
-    <button type="button" id="menu-levels" data-i18n="mainMenu.levelSelect"></button>
-    <button type="button" id="menu-tutorial" data-i18n="mainMenu.tutorial"></button>
-    <button type="button" id="menu-sandbox" data-i18n="mainMenu.sandbox"></button>
-    <label class="compact-field menu-lang-field" for="menu-language-select">
-      <span data-i18n="common.language"></span>
-      <select id="menu-language-select">
-        <option value="pt-BR">Português (Brasil)</option>
-        <option value="en">English</option>
-      </select>
-    </label>
+<div class="main-menu-layout">
+  <aside class="menu-card menu-hero-panel">
+    <div class="menu-brand-block">
+      <p class="eyebrow" data-i18n="mainMenu.eyebrow"></p>
+      <h2 class="menu-title">SHIFTWORKS</h2>
+      <p class="menu-subtitle" data-i18n="mainMenu.subtitle"></p>
+      <p class="menu-description" data-i18n="mainMenu.description"></p>
+    </div>
+
+    <nav class="menu-actions" aria-label="Main menu navigation">
+      <button type="button" id="menu-continue" data-i18n="mainMenu.continue"></button>
+      <button type="button" id="menu-levels" data-i18n="mainMenu.levelSelect"></button>
+      <button type="button" id="menu-tutorial" data-i18n="mainMenu.tutorial"></button>
+      <button type="button" id="menu-sandbox" data-i18n="mainMenu.sandbox"></button>
+      <button type="button" id="menu-settings" data-i18n="mainMenu.settings"></button>
+    </nav>
+
+    <footer class="menu-footer">
+      <p id="menu-progress-summary" class="menu-progress-summary"></p>
+      <label class="compact-field menu-lang-field" for="menu-language-select">
+        <span data-i18n="common.language"></span>
+        <select id="menu-language-select">
+          <option value="pt-BR">Português (Brasil)</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+    </footer>
+  </aside>
+
+  <div class="menu-diorama-caption" aria-hidden="true">
+    <span class="diorama-pill" data-i18n="mainMenu.dioramaBadge"></span>
+    <span class="diorama-flow">SOURCE → SHIFT (CUT / PRESS) → DIVERTER (A / B)</span>
   </div>
 </div>

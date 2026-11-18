@@ -16,6 +16,7 @@ import {
   type GridDimensions,
 } from '../domain/grid.model';
 import { pickGridCell } from '../interaction/grid-picking';
+import { i18n } from '../../i18n';
 import { disposeSceneResources, GridView } from './grid-view';
 import { CAMERA_ZOOM_STEP, MAX_CAMERA_ZOOM, MIN_CAMERA_ZOOM, orthographicFrustum, zoomFromWheel } from './zoom';
 
@@ -216,6 +217,13 @@ export class SceneManager {
     return this.selectedCell;
   }
 
+  refreshSelectedCellLabel(): void {
+    if (!this.selectedCellOutput) return;
+    this.selectedCellOutput.textContent = this.selectedCell
+      ? i18n.t('common.selectedCell', { x: this.selectedCell.x, y: this.selectedCell.y })
+      : i18n.t('common.selectedCellNone');
+  }
+
   renderNow(): void { this.renderer.render(this.scene, this.camera); }
 
   private bindEvents(): void {
@@ -263,11 +271,7 @@ export class SceneManager {
     this.selectedCell = cell;
     this.gridView.setSelectedCell(cell);
     if (changed) this.onCellHover?.(cell);
-    if (this.selectedCellOutput) {
-      this.selectedCellOutput.textContent = cell
-        ? `Selected cell: ${cell.x}, ${cell.y}`
-        : 'Selected cell: none';
-    }
+    this.refreshSelectedCellLabel();
   }
 
   private updateCameraFrustum(aspect = this.currentAspect()): void {

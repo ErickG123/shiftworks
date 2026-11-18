@@ -1,9 +1,22 @@
 :root {
   color-scheme: dark;
+  --bg-canvas: #0b1120;
+  --bg-surface: #0f172a;
+  --bg-elevated: #111827;
+  --border-subtle: #1e293b;
+  --border-strong: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --accent-primary: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-focus: #60a5fa;
+  --accent-positive: #6ee7b7;
+  --accent-danger: #fca5a5;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  background: #0b1120;
+  background: var(--bg-canvas);
   color: #e2e8f0;
   font-weight: 400;
 }
@@ -53,12 +66,12 @@ p {
 /* Header */
 .game-header {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem 1.25rem;
-  padding: 0.5rem 1rem;
-  min-height: 54px;
+  gap: 0.5rem 0.85rem;
+  padding: 0.4rem 0.85rem;
+  min-height: 52px;
   background: #0f172a;
   border-bottom: 1px solid #1e293b;
 }
@@ -117,9 +130,15 @@ p {
 }
 
 .runtime-badges {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .badge {
@@ -270,6 +289,10 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+.sandbox-controls[hidden] {
+  display: none !important;
 }
 
 .zoom-controls {
@@ -509,92 +532,277 @@ input:focus-visible {
   }
 }
 
-/* Main Menu, Level Select & Tutorial Overlay */
+/* Screen Separation: hide gameplay HUD when in MAIN_MENU or LEVEL_SELECT */
+.app-shell:not([data-screen="GAMEPLAY"]) {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.app-shell:not([data-screen="GAMEPLAY"]) .game-workspace {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.app-shell:not([data-screen="GAMEPLAY"]) .game-header,
+.app-shell:not([data-screen="GAMEPLAY"]) .left-rail,
+.app-shell:not([data-screen="GAMEPLAY"]) .viewport-toolbar,
+.app-shell:not([data-screen="GAMEPLAY"]) .right-inspector,
+.app-shell:not([data-screen="GAMEPLAY"]) .bottom-bar {
+  display: none !important;
+}
+
+/* Main Menu, Level Select & Settings Screens */
 .screen-overlay {
   position: fixed;
   inset: 0;
   z-index: 40;
-  display: grid;
-  place-items: center;
-  padding: 1.5rem;
-  background: rgb(11 17 32 / 86%);
-  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 2rem 2.5rem;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgb(11 17 32 / 94%) 0%, rgb(11 17 32 / 76%) 36%, rgb(11 17 32 / 10%) 72%, transparent 100%);
+}
+
+.screen-overlay[data-screen="LEVEL_SELECT"] {
+  pointer-events: auto;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 18%, #172554 0%, #0b1120 76%);
 }
 
 .screen-overlay[hidden] {
-  display: none;
+  display: none !important;
+}
+
+.main-menu-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
 }
 
 .menu-card {
-  width: min(100%, 420px);
-  padding: 1.75rem;
-  border-radius: 0.9rem;
-  background: #0f172a;
-  border: 1px solid #1e293b;
-  box-shadow: 0 24px 60px rgb(0 0 0 / 55%);
-  text-align: center;
+  pointer-events: auto;
+  width: min(100%, 430px);
+  padding: 1.85rem;
+  border-radius: 1rem;
+  background: rgb(15 23 42 / 94%);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 65%);
+  text-align: left;
+}
+
+.menu-hero-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .menu-card-wide {
-  width: min(100%, 760px);
+  width: min(100%, 860px);
   text-align: left;
 }
 
 .menu-title {
   margin: 0.25rem 0;
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: #f8fafc;
+  color: var(--text-primary);
 }
 
 .menu-subtitle {
-  margin: 0 0 1.25rem;
-  color: #94a3b8;
-  font-size: 0.92rem;
+  margin: 0 0 0.4rem;
+  color: #93c5fd;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.menu-description {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
 }
 
 .menu-actions {
   display: grid;
-  gap: 0.6rem;
+  gap: 0.55rem;
 }
 
 .menu-actions button {
-  padding: 0.65rem 1rem;
+  padding: 0.68rem 1rem;
   font-size: 0.92rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.menu-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.menu-progress-summary {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.menu-lang-field {
+  justify-content: space-between;
+}
+
+.menu-diorama-caption {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.75rem;
+  background: rgb(15 23 42 / 84%);
+  border: 1px solid var(--border-subtle);
+}
+
+.diorama-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #6ee7b7;
+}
+
+.diorama-flow {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.level-select-screen {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .level-select-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .level-select-header h2 {
+  margin: 0.2rem 0;
+  font-size: 1.35rem;
+}
+
+.level-select-subtitle {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 .level-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.85rem;
 }
 
 .level-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.85rem;
-  border-radius: 0.6rem;
-  background: #111827;
-  border: 1px solid #1e293b;
+  gap: 0.65rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+.level-card[data-status="UNLOCKED"] {
+  border-color: #3b82f6;
+}
+
+.level-card[data-status="COMPLETED"] {
+  border-color: #10b981;
 }
 
 .level-card[data-status="LOCKED"] {
-  opacity: 0.6;
+  opacity: 0.68;
+}
+
+.level-prereq {
+  font-size: 0.75rem !important;
+  color: #fca5a5 !important;
+  font-weight: 600;
+}
+
+/* Settings Modal */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgb(11 17 32 / 80%);
+}
+
+.settings-overlay[hidden] {
+  display: none !important;
+}
+
+.settings-modal-card {
+  width: min(100%, 440px);
+  padding: 1.5rem;
+  border-radius: 0.9rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 65%);
+}
+
+.settings-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.settings-modal-header h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.settings-section {
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.settings-section h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #93c5fd;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.88rem;
+}
+
+.settings-note {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
 }
 
 .level-card-header {

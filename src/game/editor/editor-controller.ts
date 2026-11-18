@@ -12,15 +12,12 @@ import { getToolAvailability } from './tool-availability';
 import { isGlobalShortcutAllowed } from '../interaction/keyboard-shortcuts';
 import { ComponentView, type MachineVisualState } from '../rendering/component-view';
 import type { SceneManager } from '../rendering/scene-manager';
+import { i18n } from '../../i18n';
 
 type Tool = 'SELECT' | 'REMOVE' | EditableComponentType;
-const messages: Record<EditorErrorCode, string> = {
-  NOT_EDITING: 'Editing is locked while the factory is running.', OUT_OF_BOUNDS: 'That cell is outside the board.',
-  CELL_OCCUPIED: 'That cell is occupied.', FIXED_COMPONENT: 'Source and outputs are fixed in place.',
-  INVENTORY_EXCEEDED: 'No pieces of this type remain.', UNKNOWN_COMPONENT: 'That component could not be found.',
-  DUPLICATE_RULE: 'Each input material can have only one recipe.', TOO_MANY_RULES: 'A processor supports at most two recipes.',
-  UNSUPPORTED_RULE: 'Recipes can only be assigned to processors.',
-};
+function errorMessage(code: EditorErrorCode): string {
+  return i18n.t(`editor.error.${code}`);
+}
 
 export class EditorController {
   private readonly storage = new GameStorageAdapter();
@@ -74,7 +71,7 @@ export class EditorController {
   private readonly handleKey = (event: KeyboardEvent): void => {
     if (!isGlobalShortcutAllowed(event)) return;
     if (event.key.toLowerCase() === 'r' && this.selectedId) { this.rotateSelected(); event.preventDefault(); }
-    if (event.key === 'Escape' && this.tool !== 'SELECT') { this.setTool('SELECT'); this.announce('Build tool canceled.'); event.preventDefault(); }
+    if (event.key === 'Escape' && this.tool !== 'SELECT') { this.setTool('SELECT'); this.announce(i18n.t('editor.toolCanceled')); event.preventDefault(); }
   };
 
   constructor(private readonly sceneManager: SceneManager) {
@@ -158,7 +155,7 @@ export class EditorController {
     this.loadExampleButton.disabled = mode !== 'EDITING';
     this.blueRule.disabled = mode !== 'EDITING'; this.amberRule.disabled = mode !== 'EDITING'; this.saveRulesButton.disabled = mode !== 'EDITING';
     this.cutRoute.disabled = mode !== 'EDITING'; this.pressedRoute.disabled = mode !== 'EDITING'; this.saveDiverterRulesButton.disabled = mode !== 'EDITING';
-    if (mode !== 'EDITING') this.status.textContent = mode === 'RUNNING' ? 'Factory is running; editing is locked.' : 'Factory is paused; edit to change the layout.';
+    if (mode !== 'EDITING') this.status.textContent = mode === 'RUNNING' ? i18n.t('editor.runningLocked') : i18n.t('editor.pausedLocked');
     this.refresh();
     return true;
   }
@@ -167,15 +164,26 @@ export class EditorController {
     if (this.tool === 'SELECT') {
       const found = this.state.components.find((component) => component.position.x === cell.x && component.position.y === cell.y);
       this.selectedId = found?.id ?? null;
-      this.status.textContent = found ? `${found.type} selected${found.isFixed ? ' · fixed' : ''}. Press R or Rotate.` : `Cell ${cell.x}, ${cell.y} selected.`;
+      this.status.textContent = found
+        ? i18n.t('editor.componentSelected', { type: found.type, fixed: found.isFixed ? i18n.t('editor.fixedSuffix') : '' })
+        : i18n.t('editor.cellSelected', { x: cell.x, y: cell.y });
       this.refresh(); return;
     }
     if (this.tool === 'REMOVE') {
       const found = this.state.components.find((component) => component.position.x === cell.x && component.position.y === cell.y);
-      if (!found) { this.status.textContent = 'No component in that cell.'; return; }
+      if (!found) { this.status.textContent = i18n.t('editor.noComponentInCell'); return; }
       this.apply({ kind: 'REMOVE', componentId: found.id }); this.selectedId = null; return;
     }
     this.apply({ kind: 'PLACE', componentType: this.tool, position: cell, direction: this.direction });
+  }
+
+  refreshTranslations(): void {
+    this.sceneManager.resize();
+    this.refreshLevelOptions();
+    this.status.textContent = i18n.t('editor.defaultHint');
+    this.storageStatus.textContent = i18n.t('editor.storageDefault');
+    this.sceneManager.refreshSelectedCellLabel();
+    this.refresh();
   }
 
   dispose(): void { this.view.dispose(); this.toolbar.removeEventListener('click', this.handleToolbarClick); this.saveRulesButton.removeEventListener('click', this.saveProcessorRules); this.saveDiverterRulesButton.removeEventListener('click', this.saveDiverterRules); this.levelSelect.removeEventListener('change', this.handleLevelChange); this.gameModeSelect.removeEventListener('change', this.handleGameModeChange); this.sandboxSourceSelect.removeEventListener('change', this.handleSourceModeChange); this.clearSandboxButton.removeEventListener('click', this.handleClearSandbox); this.loadExampleButton.removeEventListener('click', this.handleLoadExample); document.removeEventListener('keydown', this.handleKey); }
@@ -192,8 +200,8 @@ export class EditorController {
     this.state = createEditorState(level);
     this.selectedId = null;
     this.hover = null;
-    this.levelInstructions.textContent = level.tutorial;
-    this.status.textContent = `${level.id} · ${level.lesson}`;
+    this.levelInstructions.textContent = i18n.t(`levels.${level.id}.tutorial`);
+    this.status.textContent = `${level.id} · ${i18n.t(`levels.${level.id}.lesson`)}`;
     this.refreshLevelOptions();
     this.refreshModeControls();
     this.persistPreferences();
@@ -229,11 +237,11 @@ export class EditorController {
 
   private clearSandbox(): void {
     if (!this.isSandbox() || this.state.mode !== 'EDITING') return;
-    if (!window.confirm('Clear the Sandbox layout? Campaign progress will be kept.')) return;
+    if (!window.confirm(i18n.t('editor.sandboxClearConfirm'))) return;
     this.state = createSandboxEditorState(this.level);
     this.sandboxComponents = this.state.components;
     this.selectedId = null;
-    this.status.textContent = 'Sandbox cleared. Campaign progress is unchanged.';
+    this.status.textContent = i18n.t('editor.sandboxCleared');
     this.refresh();
     this.scenarioChangeHandler();
   }
@@ -243,7 +251,7 @@ export class EditorController {
     this.state = createSandboxEditorState(this.level, this.level.referenceComponents);
     this.sandboxComponents = this.state.components;
     this.selectedId = null;
-    this.status.textContent = 'Sandbox example loaded.';
+    this.status.textContent = i18n.t('editor.sandboxExampleLoaded');
     this.refresh();
     this.scenarioChangeHandler();
   }
@@ -269,7 +277,7 @@ export class EditorController {
       preferences: Object.freeze({ gameMode: this.gameMode, levelId: this.lastCampaignLevelId, sourceSequenceMode: this.sandboxSourceMode }),
     }));
     this.persisted = this.storage.load();
-    this.storageStatus.textContent = saved ? 'Progress and preferences saved on this device.' : 'Local storage unavailable; progress lasts for this session.';
+    this.storageStatus.textContent = saved ? i18n.t('editor.storageSaved') : i18n.t('editor.storageSessionOnly');
   }
 
   private refreshModeControls(): void {
@@ -283,7 +291,7 @@ export class EditorController {
     const options = LEVEL_CATALOG.map((level) => {
       const locked = !isLevelUnlocked(level.id, this.completedLevels);
       const option = new Option(
-        `${level.id} · ${level.title}${locked ? ' (locked)' : ''}`,
+        `${level.id} · ${i18n.t(`levels.${level.id}.title`)}${locked ? i18n.t('common.lockedSuffix') : ''}`,
         level.id,
       );
       option.disabled = locked;
@@ -291,7 +299,7 @@ export class EditorController {
     });
     this.levelSelect.replaceChildren(...options);
     this.levelSelect.value = this.level.id;
-    this.levelInstructions.textContent = this.level.tutorial;
+    this.levelInstructions.textContent = i18n.t(`levels.${this.level.id}.tutorial`);
   }
 
   private readonly handleToolbarClick = (event: Event): void => {
@@ -301,10 +309,10 @@ export class EditorController {
     if (value) {
       if (button.disabled) return;
       this.setTool(value as Tool);
-      this.announce(`${button.textContent?.trim() ?? value} tool selected.`);
+      this.announce(i18n.t('editor.toolSelected', { tool: button.textContent?.trim() ?? value }));
     }
     if (button.dataset['action'] === 'rotate') this.rotateSelected();
-    if (button.dataset['action'] === 'cancel') { this.setTool('SELECT'); this.announce('Build tool canceled.'); }
+    if (button.dataset['action'] === 'cancel') { this.setTool('SELECT'); this.announce(i18n.t('editor.toolCanceled')); }
   };
 
   private setTool(tool: Tool): void {
@@ -315,7 +323,7 @@ export class EditorController {
   }
 
   private rotateSelected(): void {
-    if (!this.selectedId) { this.status.textContent = 'Select a component before rotating it.'; return; }
+    if (!this.selectedId) { this.status.textContent = i18n.t('editor.selectBeforeRotate'); return; }
     this.apply({ kind: 'ROTATE', componentId: this.selectedId });
   }
 
@@ -337,10 +345,19 @@ export class EditorController {
 
   private apply(command: Parameters<typeof reduceEditor>[1]): void {
     const result = reduceEditor(this.state, command);
-    if (!result.ok) { this.status.textContent = messages[result.error.code]; return; }
+    if (!result.ok) { this.status.textContent = errorMessage(result.error.code); return; }
     this.state = result.state;
     if (this.isSandbox()) this.sandboxComponents = this.state.components;
-    this.status.textContent = command.kind === 'PLACE' ? `${command.componentType} placed at ${command.position.x}, ${command.position.y}.` : command.kind === 'REMOVE' ? 'Component removed; piece returned to inventory.' : command.kind === 'SET_PROCESSOR_RULES' ? 'Processor recipes saved.' : command.kind === 'SET_DIVERTER_RULES' ? 'Diverter routes saved.' : 'Component rotated clockwise.'; this.refresh();
+    this.status.textContent = command.kind === 'PLACE'
+      ? i18n.t('editor.placedAt', { type: command.componentType, x: command.position.x, y: command.position.y })
+      : command.kind === 'REMOVE'
+        ? i18n.t('editor.removed')
+        : command.kind === 'SET_PROCESSOR_RULES'
+          ? i18n.t('editor.processorRulesSaved')
+          : command.kind === 'SET_DIVERTER_RULES'
+            ? i18n.t('editor.diverterRoutesSaved')
+            : i18n.t('editor.rotated');
+    this.refresh();
   }
 
   private refresh(): void {
@@ -360,7 +377,8 @@ export class EditorController {
       });
       button.disabled = !availability.enabled;
       const baseLabel = button.textContent?.trim() ?? toolKey;
-      button.title = availability.reason ? `${baseLabel} — ${availability.reason}` : baseLabel;
+      const localizedReason = availability.reasonKey ? i18n.t(availability.reasonKey) : availability.reason;
+      button.title = localizedReason ? `${baseLabel} — ${localizedReason}` : baseLabel;
       if (!availability.enabled && this.tool === toolKey) {
         this.tool = 'SELECT';
         this.toolbar.querySelectorAll<HTMLButtonElement>('[data-tool]').forEach((btn) =>
@@ -383,14 +401,18 @@ export class EditorController {
         const label = document.createElement('span');
         label.textContent = type;
         const value = document.createElement('strong');
-        value.textContent = this.state.unlimitedInventory ? 'Unlimited' : String(count);
+        value.textContent = this.state.unlimitedInventory ? i18n.t('editor.unlimited') : String(count);
         li.append(label, value);
         return li;
       },
     );
     this.inventory.replaceChildren(...inventoryItems);
     const links = findPortConnections(this.state.components);
-    this.connections.textContent = links.length ? `${links.length} adjacent port connection${links.length === 1 ? '' : 's'} detected` : 'Ports face adjacent cells; connections appear automatically. No cables required.';
+    this.connections.textContent = links.length
+      ? links.length === 1
+        ? i18n.t('editor.connectionsSingle')
+        : i18n.t('editor.connectionsPlural', { count: links.length })
+      : i18n.t('editor.connectionsDefault');
     const selectedProcessor = this.state.components.find((component) => component.id === this.selectedId && component.type === 'PROCESSOR');
     const selectedDiverter = this.state.components.find((component) => component.id === this.selectedId && component.type === 'DIVERTER');
     this.rulePanel.hidden = !selectedProcessor;
@@ -410,8 +432,8 @@ export class EditorController {
     else {
       this.placementStatus.dataset['valid'] = String(ghost.valid);
       this.placementStatus.textContent = ghost.valid
-        ? `Preview valid at ${ghost.position.x}, ${ghost.position.y}.`
-        : `Preview blocked: ${messages[placementError!]}`;
+        ? i18n.t('editor.previewValid', { x: ghost.position.x, y: ghost.position.y })
+        : i18n.t('editor.previewBlocked', { reason: errorMessage(placementError!) });
     }
   }
 

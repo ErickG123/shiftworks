@@ -18,6 +18,7 @@ test('builds the L03 reference route and wins without input after Start', async 
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/');
+  await page.locator('#menu-language-select').selectOption('en');
   await page.locator('#menu-continue').click();
   await expect(page.locator('#engine-status')).toHaveAttribute('data-status', 'ready');
 

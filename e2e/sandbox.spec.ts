@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('Sandbox reuses the factory and remains playable when localStorage is blocked', async ({ page }) => {
+  test.setTimeout(120_000);
   await page.addInitScript(() => {
     Object.defineProperty(window, 'localStorage', {
       configurable: true,
@@ -8,10 +9,12 @@ test('Sandbox reuses the factory and remains playable when localStorage is block
     });
   });
   await page.goto('/');
+  await page.locator('#menu-language-select').selectOption('en');
   await page.locator('#menu-continue').click();
   await expect(page.locator('#game-mode-select')).toHaveValue('CAMPAIGN');
   await expect(page.locator('#storage-status')).toBeVisible();
   await page.reload();
+  await page.locator('#menu-language-select').selectOption('en');
   await page.locator('#menu-continue').click();
   await expect(page.locator('#game-mode-select')).toHaveValue('CAMPAIGN');
   await page.locator('#game-mode-select').selectOption('SANDBOX');

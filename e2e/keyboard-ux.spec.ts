@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 test('keyboard shortcuts support the board and respect focused controls', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto('/');
+  await page.locator('#menu-language-select').selectOption('en');
   await page.locator('#menu-continue').click();
   const canvas = page.locator('#factory-canvas');
   const start = page.locator('#start-simulation');
@@ -27,6 +28,7 @@ test('keyboard shortcuts support the board and respect focused controls', async 
 
 test('Space on a focused action button keeps native button behavior', async ({ page }) => {
   await page.goto('/');
+  await page.locator('#menu-language-select').selectOption('en');
   await page.locator('#menu-continue').click();
   const start = page.locator('#start-simulation');
   await start.focus();

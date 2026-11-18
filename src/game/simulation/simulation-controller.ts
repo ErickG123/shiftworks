@@ -9,6 +9,7 @@ import { ItemView } from '../rendering/item-view';
 import { projectItems } from '../rendering/item-projection';
 import { step } from './simulation-engine';
 import { isGlobalShortcutAllowed } from '../interaction/keyboard-shortcuts';
+import { i18n } from '../../i18n';
 
 const TICK_INTERVAL_MS = 250;
 
@@ -114,16 +115,16 @@ export class SimulationController {
     try {
       const initial = createSimulationState(this.editor.getLevel(), this.editor.getComponents());
       const result = startSession(initial);
-      if (!result.ok) { this.messageOutput.textContent = 'The factory cannot start from its current state.'; this.announce(this.messageOutput.textContent); return; }
+      if (!result.ok) { this.messageOutput.textContent = i18n.t('simulation.cannotStart'); this.announce(this.messageOutput.textContent); return; }
       this.state = result.state;
       this.editor.setMode('RUNNING');
       this.startTimer();
       this.render();
-      this.messageOutput.textContent = 'Factory started. One simulation tick runs every 250 ms.';
-      this.announce('Factory started.');
+      this.messageOutput.textContent = i18n.t('simulation.started');
+      this.announce(i18n.t('simulation.startedShort'));
       this.updateControls();
     } catch (error) {
-      this.messageOutput.textContent = error instanceof Error ? error.message : 'The factory layout is invalid.';
+      this.messageOutput.textContent = error instanceof Error ? error.message : i18n.t('simulation.invalidLayout');
       this.announce(this.messageOutput.textContent);
     }
   }
@@ -136,8 +137,8 @@ export class SimulationController {
     this.itemView.pause();
     this.state = result.state;
     this.editor.setMode('PAUSED');
-    this.messageOutput.textContent = 'Factory paused. Simulation ticks are frozen.';
-    this.announce('Factory paused.');
+    this.messageOutput.textContent = i18n.t('simulation.paused');
+    this.announce(i18n.t('simulation.pausedShort'));
     this.updateControls();
   }
 
@@ -149,8 +150,8 @@ export class SimulationController {
     this.editor.setMode('RUNNING');
     this.itemView.resume();
     this.startTimer();
-    this.messageOutput.textContent = 'Factory resumed.';
-    this.announce('Factory resumed.');
+    this.messageOutput.textContent = i18n.t('simulation.resumed');
+    this.announce(i18n.t('simulation.resumed'));
     this.updateControls();
   }
 
@@ -162,8 +163,8 @@ export class SimulationController {
     this.state = result.state;
     this.editor.setMode('EDITING');
     this.render();
-    this.messageOutput.textContent = 'Progress reset. Layout preserved; editing unlocked.';
-    this.announce('Simulation stopped. Editing unlocked. Progress reset.');
+    this.messageOutput.textContent = i18n.t('simulation.editReset');
+    this.announce(i18n.t('simulation.editResetShort'));
     this.updateControls();
   }
 
@@ -173,8 +174,8 @@ export class SimulationController {
     this.state = resetSession(this.state);
     this.editor.setMode('EDITING');
     this.render();
-    this.messageOutput.textContent = 'Attempt reset. Layout preserved.';
-    this.announce('Attempt reset.');
+    this.messageOutput.textContent = i18n.t('simulation.attemptReset');
+    this.announce(i18n.t('simulation.attemptResetShort'));
     this.updateControls();
   }
 
@@ -186,8 +187,8 @@ export class SimulationController {
     this.editor.setMode('RUNNING');
     this.startTimer();
     this.render();
-    this.messageOutput.textContent = 'Replay started from tick zero.';
-    this.announce('Replay started.');
+    this.messageOutput.textContent = i18n.t('simulation.replayStarted');
+    this.announce(i18n.t('simulation.replayStartedShort'));
     this.updateControls();
   }
 
@@ -198,12 +199,12 @@ export class SimulationController {
     if (!this.editor.selectNextLevel()) return;
     this.state = null;
     this.itemView.render([]);
-    this.goalStatus.textContent = this.editor.getLevel().goals.map((goal) => `${goal.itemType} at ${goal.outputId}: 0/${goal.quantity}`).join(' · ');
-    this.tickOutput.textContent = 'Tick 0';
-    this.metricsOutput.textContent = 'Ticks: 0 · Delivered: 0 · Rejected: 0 · Mode shifts: 0 · Pieces: 0';
+    this.goalStatus.textContent = this.editor.getLevel().goals.map((goal) => i18n.t('simulation.goalItemAt', { item: goal.itemType, output: goal.outputId, delivered: 0, quantity: goal.quantity })).join(' · ');
+    this.tickOutput.textContent = i18n.t('simulation.tick', { count: 0 });
+    this.metricsOutput.textContent = i18n.t('simulation.metricsFormat', { ticks: 0, delivered: 0, rejected: 0, shifts: 0, pieces: 0 });
     this.resultPanel.hidden = true;
-    this.messageOutput.textContent = `${this.editor.getLevel().id} selected. Build the factory, then Start.`;
-    this.announce(`${this.editor.getLevel().id} selected.`);
+    this.messageOutput.textContent = i18n.t('simulation.levelSelected', { id: this.editor.getLevel().id });
+    this.announce(i18n.t('simulation.levelSelectedShort', { id: this.editor.getLevel().id }));
     this.updateControls();
     this.sceneManager.renderNow();
   }
@@ -215,7 +216,7 @@ export class SimulationController {
     const soundCue = [...result.events].reverse().map(soundCueForEvent).find((cue) => cue !== null) ?? null;
     this.audio.play(soundCue);
     this.render();
-    this.tickOutput.textContent = `Tick ${this.state.tick}`;
+    this.tickOutput.textContent = i18n.t('simulation.tick', { count: this.state.tick });
     this.messageOutput.textContent = this.describeEvents(result.events);
     const announcement = this.describeImportantEvent(result.events);
     if (announcement) this.announce(announcement);
@@ -223,8 +224,8 @@ export class SimulationController {
       this.stopTimer();
       this.editor.setMode('RESULT');
       this.editor.markLevelComplete();
-      this.messageOutput.textContent = 'All output goals completed.';
-      this.announce('Factory complete. All output goals completed.');
+      this.messageOutput.textContent = i18n.t('simulation.allGoalsCompleted');
+      this.announce(i18n.t('simulation.factoryCompleteShort'));
       this.updateControls();
     }
   };
@@ -235,12 +236,20 @@ export class SimulationController {
     this.syncMachineVisuals();
     this.renderMachineStatus();
     const delivered = Object.values(this.state.metrics.itemsDeliveredByOutput).reduce((sum, count) => sum + count, 0);
-    const metrics = `Ticks: ${this.state.tick} · Delivered: ${delivered} · Rejected: ${this.state.metrics.rejectedCount} · Mode shifts: ${this.state.metrics.modeShiftCount} · Pieces: ${this.state.metrics.piecesUsed}`;
+    const metrics = i18n.t('simulation.metricsFormat', {
+      ticks: this.state.tick,
+      delivered,
+      rejected: this.state.metrics.rejectedCount,
+      shifts: this.state.metrics.modeShiftCount,
+      pieces: this.state.metrics.piecesUsed,
+    });
     this.metricsOutput.textContent = metrics;
     this.resultSummary.textContent = metrics;
     this.resultPanel.hidden = this.state.mode !== 'RESULT';
-    this.resultLevelTitle.textContent = `${this.editor.getLevel().id} · ${this.editor.getLevel().title}`;
-    this.resultStars.textContent = this.state.mode === 'RESULT' ? `Stars: ${calculateStarRating(this.editor.getLevel(), this.state)} / 3` : '';
+    this.resultLevelTitle.textContent = `${this.editor.getLevel().id} · ${i18n.t(`levels.${this.editor.getLevel().id}.title`)}`;
+    this.resultStars.textContent = this.state.mode === 'RESULT'
+      ? i18n.t('simulation.starsFormat', { stars: calculateStarRating(this.editor.getLevel(), this.state) })
+      : '';
     this.nextLevelButton.hidden = !this.editor.getNextLevelId();
     this.sceneManager.renderNow();
   }
@@ -250,30 +259,38 @@ export class SimulationController {
     if (this.editor.isSandbox()) {
       const outputs = this.state.layout.components.filter((component) => component.type === 'OUTPUT');
       this.goalStatus.textContent = outputs.length
-        ? `Output counts: ${outputs.map((output) => `${output.label} (${output.id}) ${this.state!.metrics.itemsDeliveredByOutput[output.id] ?? 0}`).join(' · ')}`
-        : 'No outputs configured.';
+        ? i18n.t('simulation.outputCounts', {
+            counts: outputs.map((output) => `${output.label} (${output.id}) ${this.state!.metrics.itemsDeliveredByOutput[output.id] ?? 0}`).join(' · '),
+          })
+        : i18n.t('simulation.noOutputs');
     } else {
       this.goalStatus.textContent = this.state.goals.length
-        ? this.state.goals.map(({ goal, delivered }) => `${goal.itemType} at ${goal.outputId}: ${delivered}/${goal.quantity}`).join(' · ')
-        : 'No output goals configured.';
+        ? this.state.goals.map(({ goal, delivered }) => i18n.t('simulation.goalItemAt', { item: goal.itemType, output: goal.outputId, delivered, quantity: goal.quantity })).join(' · ')
+        : i18n.t('simulation.noGoals');
     }
     const descriptions = this.state.processors.map((runtime) => {
       const component = this.state!.layout.components.find((candidate) => candidate.id === runtime.componentId);
       const blocked = this.state!.diagnostics.some((diagnostic) => diagnostic.componentId === runtime.componentId && diagnostic.reason !== 'RULE_MISSING');
       let status = runtime.phase[0] + runtime.phase.slice(1).toLowerCase();
-      if (runtime.phase === 'SHIFTING') status = `Shifting to ${runtime.targetMode} (${runtime.ticksRemaining} ticks)`;
-      else if (runtime.phase === 'PROCESSING') status = `Processing (${runtime.ticksRemaining} ticks)`;
-      else if (runtime.phase === 'READY' && blocked) status = 'Blocked · output unavailable';
-      else if (runtime.phase === 'READY') status = 'Ready';
-      else if (runtime.phase === 'RULE_MISSING') status = 'Rule missing';
+      if (runtime.phase === 'SHIFTING') status = i18n.t('simulation.shiftingTo', { mode: runtime.targetMode ?? '', ticks: runtime.ticksRemaining });
+      else if (runtime.phase === 'PROCESSING') status = i18n.t('simulation.processingTicks', { ticks: runtime.ticksRemaining });
+      else if (runtime.phase === 'READY' && blocked) status = i18n.t('simulation.blockedOutput');
+      else if (runtime.phase === 'READY') status = i18n.t('simulation.ready');
+      else if (runtime.phase === 'RULE_MISSING') status = i18n.t('simulation.ruleMissing');
       return `${component?.id ?? runtime.componentId}: ${status}`;
     });
     for (const runtime of this.state.diverters) {
       const blocked = this.state.diagnostics.some((diagnostic) => diagnostic.componentId === runtime.componentId && diagnostic.reason !== 'RULE_MISSING');
-      const status = runtime.itemId ? (runtime.route ? (blocked ? `Blocked · route ${runtime.route}` : `Route ${runtime.route}`) : 'Rule missing') : 'Idle';
+      const status = runtime.itemId
+        ? runtime.route
+          ? blocked
+            ? i18n.t('simulation.blockedRoute', { route: runtime.route })
+            : i18n.t('simulation.routeLabel', { route: runtime.route })
+          : i18n.t('simulation.ruleMissing')
+        : i18n.t('simulation.idle');
       descriptions.push(`${runtime.componentId}: ${status}`);
     }
-    this.machineStatus.textContent = descriptions.length ? descriptions.join(' · ') : 'Machines: Idle';
+    this.machineStatus.textContent = descriptions.length ? descriptions.join(' · ') : i18n.t('simulation.machinesIdle');
   }
 
   private describeEvents(events: readonly SimulationEvent[]): string {
@@ -308,16 +325,37 @@ export class SimulationController {
     this.announcementOutput.textContent = message;
   }
 
+  refreshTranslations(): void {
+    const enabled = this.audioToggle.getAttribute('aria-pressed') === 'true';
+    this.audioToggle.textContent = enabled ? i18n.t('common.soundOn') : i18n.t('common.soundOff');
+    if (this.state) {
+      this.render();
+      this.tickOutput.textContent = i18n.t('simulation.tick', { count: this.state.tick });
+    } else {
+      const level = this.editor.getLevel();
+      const outputs = level.fixedComponents.filter((component) => component.type === 'OUTPUT');
+      this.goalStatus.textContent = this.editor.isSandbox()
+        ? i18n.t('simulation.outputCounts', {
+            counts: outputs.map((output) => `${output.label} (${output.id}) 0`).join(' · '),
+          })
+        : level.goals.map((goal) => i18n.t('simulation.goalItemAt', { item: goal.itemType, output: goal.outputId, delivered: 0, quantity: goal.quantity })).join(' · ');
+      this.tickOutput.textContent = i18n.t('simulation.tick', { count: 0 });
+      this.metricsOutput.textContent = i18n.t('simulation.metricsFormat', { ticks: 0, delivered: 0, rejected: 0, shifts: 0, pieces: 0 });
+      this.machineStatus.textContent = i18n.t('simulation.processorIdle');
+      this.messageOutput.textContent = i18n.t('simulation.readyMessage');
+    }
+  }
+
   private async toggleAudio(): Promise<void> {
     const enabled = !this.audio.isEnabled();
     const available = await this.audio.setEnabled(enabled);
     this.audioToggle.setAttribute('aria-pressed', String(available && enabled));
-    this.audioToggle.textContent = available && enabled ? 'Sound on' : 'Sound off';
+    this.audioToggle.textContent = available && enabled ? i18n.t('common.soundOn') : i18n.t('common.soundOff');
     this.audioVolume.disabled = !available || !enabled;
     if (!enabled) this.audio.dispose();
     const message = available && enabled
-      ? 'Sound effects enabled.'
-      : enabled ? 'Audio is unavailable. The factory remains fully readable without sound.' : 'Sound effects muted.';
+      ? i18n.t('simulation.audioEnabled')
+      : enabled ? i18n.t('simulation.audioUnavailable') : i18n.t('simulation.audioMuted');
     this.audioStatus.textContent = message;
     this.announce(message);
   }
@@ -376,13 +414,16 @@ export class SimulationController {
     const level = this.editor.getLevel();
     const outputs = level.fixedComponents.filter((component) => component.type === 'OUTPUT');
     this.goalStatus.textContent = this.editor.isSandbox()
-      ? `Output counts: ${outputs.map((output) => `${output.label} (${output.id}) 0`).join(' · ')}`
-      : level.goals.map((goal) => `${goal.itemType} at ${goal.outputId}: 0/${goal.quantity}`).join(' · ');
-    this.tickOutput.textContent = 'Tick 0';
-    this.metricsOutput.textContent = 'Ticks: 0 · Delivered: 0 · Rejected: 0 · Mode shifts: 0 · Pieces: 0';
+      ? i18n.t('simulation.outputCounts', {
+          counts: outputs.map((output) => `${output.label} (${output.id}) 0`).join(' · '),
+        })
+      : level.goals.map((goal) => i18n.t('simulation.goalItemAt', { item: goal.itemType, output: goal.outputId, delivered: 0, quantity: goal.quantity })).join(' · ');
+    this.tickOutput.textContent = i18n.t('simulation.tick', { count: 0 });
+    this.metricsOutput.textContent = i18n.t('simulation.metricsFormat', { ticks: 0, delivered: 0, rejected: 0, shifts: 0, pieces: 0 });
+    this.machineStatus.textContent = i18n.t('simulation.processorIdle');
     this.resultSummary.textContent = '';
     this.resultPanel.hidden = true;
-    this.messageOutput.textContent = `${level.id} selected. Build the factory, then Start.`;
+    this.messageOutput.textContent = i18n.t('simulation.levelSelected', { id: level.id });
     this.updateControls();
     this.sceneManager.renderNow();
   };
