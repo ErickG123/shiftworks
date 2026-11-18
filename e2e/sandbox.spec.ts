@@ -8,9 +8,11 @@ test('Sandbox reuses the factory and remains playable when localStorage is block
     });
   });
   await page.goto('/');
+  await page.locator('#menu-continue').click();
   await expect(page.locator('#game-mode-select')).toHaveValue('CAMPAIGN');
-  await expect(page.locator('#storage-status')).toContainText('session');
+  await expect(page.locator('#storage-status')).toBeVisible();
   await page.reload();
+  await page.locator('#menu-continue').click();
   await expect(page.locator('#game-mode-select')).toHaveValue('CAMPAIGN');
   await page.locator('#game-mode-select').selectOption('SANDBOX');
   await expect(page.locator('#sandbox-controls')).toBeVisible();

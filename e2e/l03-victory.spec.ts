@@ -8,7 +8,7 @@ async function clickGridCell(page: Page, x: number, y: number): Promise<void> {
   const worldZ = y - 3.5;
   const cameraRight = (worldX - worldZ) / Math.sqrt(2);
   const cameraUp = -0.479 * (worldX + worldZ);
-  const localX = bounds.height / 2 + cameraRight * bounds.height / 10.8;
+  const localX = bounds.width / 2 + cameraRight * bounds.height / 10.8;
   const localY = bounds.height / 2 - cameraUp * bounds.height / 10.8;
   await canvas.click({ position: { x: localX, y: localY } });
   await expect(page.locator('#selected-cell')).toContainText(`Selected cell: ${x}, ${y}`);
@@ -18,6 +18,7 @@ test('builds the L03 reference route and wins without input after Start', async 
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/');
+  await page.locator('#menu-continue').click();
   await expect(page.locator('#engine-status')).toHaveAttribute('data-status', 'ready');
 
   await expect(page.locator('#level-select')).toHaveValue('L01');

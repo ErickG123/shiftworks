@@ -20,10 +20,10 @@ if (app && canvas) {
     });
     editor = new EditorController(sceneManager);
     const simulationController = new SimulationController(sceneManager, editor);
-    new NavigationController(app, editor);
+    const navigationController = new NavigationController(app, editor);
     sceneManager.start();
     mountStatusPage(app, true);
-    window.addEventListener('pagehide', () => { simulationController.dispose(); editor?.dispose(); sceneManager.dispose(); }, { once: true });
+    window.addEventListener('pagehide', () => { navigationController.dispose(); simulationController.dispose(); editor?.dispose(); sceneManager.dispose(); }, { once: true });
   } catch {
     mountStatusPage(app, false);
   }

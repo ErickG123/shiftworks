@@ -280,10 +280,16 @@ export class EditorController {
   }
 
   private refreshLevelOptions(): void {
-    this.levelSelect.innerHTML = LEVEL_CATALOG.map((level) => {
+    const options = LEVEL_CATALOG.map((level) => {
       const locked = !isLevelUnlocked(level.id, this.completedLevels);
-      return `<option value="${level.id}" ${locked ? 'disabled' : ''}>${level.id} · ${level.title}${locked ? ' (locked)' : ''}</option>`;
-    }).join('');
+      const option = new Option(
+        `${level.id} · ${level.title}${locked ? ' (locked)' : ''}`,
+        level.id,
+      );
+      option.disabled = locked;
+      return option;
+    });
+    this.levelSelect.replaceChildren(...options);
     this.levelSelect.value = this.level.id;
     this.levelInstructions.textContent = this.level.tutorial;
   }
@@ -371,7 +377,18 @@ export class EditorController {
       : null;
     this.view.render(this.state.components, ghost);
     this.sceneManager.renderNow();
-    this.inventory.innerHTML = (Object.entries(this.state.inventory) as [EditableComponentType, number][]).map(([type, count]) => `<li><span>${type}</span><strong>${this.state.unlimitedInventory ? 'Unlimited' : count}</strong></li>`).join('');
+    const inventoryItems = (Object.entries(this.state.inventory) as [EditableComponentType, number][]).map(
+      ([type, count]) => {
+        const li = document.createElement('li');
+        const label = document.createElement('span');
+        label.textContent = type;
+        const value = document.createElement('strong');
+        value.textContent = this.state.unlimitedInventory ? 'Unlimited' : String(count);
+        li.append(label, value);
+        return li;
+      },
+    );
+    this.inventory.replaceChildren(...inventoryItems);
     const links = findPortConnections(this.state.components);
     this.connections.textContent = links.length ? `${links.length} adjacent port connection${links.length === 1 ? '' : 's'} detected` : 'Ports face adjacent cells; connections appear automatically. No cables required.';
     const selectedProcessor = this.state.components.find((component) => component.id === this.selectedId && component.type === 'PROCESSOR');
