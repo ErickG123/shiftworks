@@ -1,0 +1,15 @@
+node_modules/
+.pnpm-store/
+dist/
+coverage/
+playwright-report/
+test-results/
+artifacts/
+.chrome-e2e-profile/
+.playwright-browsers/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+.npm-cache

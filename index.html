@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="SHIFTWORKS is a deterministic factory automation puzzle game."
+    />
+    <meta name="theme-color" content="#0b1120" />
+    <title>SHIFTWORKS - Automation Puzzle Factory</title>
+  </head>
+  <body>
+    <main id="app" class="app-shell" aria-labelledby="page-title">
+      <header class="game-header">
+        <div class="header-brand">
+          <span class="eyebrow">GAME OFF 2026</span>
+          <h1 id="page-title">SHIFTWORKS</h1>
+        </div>
+
+        <div class="header-controls">
+          <label class="compact-field" for="game-mode-select">
+            <span>Mode</span>
+            <select id="game-mode-select" aria-label="Choose game mode">
+              <option value="CAMPAIGN">Campaign</option>
+              <option value="SANDBOX">Sandbox</option>
+            </select>
+          </label>
+          <label class="compact-field" for="level-select">
+            <span>Level</span>
+            <select id="level-select" aria-label="Choose level"></select>
+          </label>
+        </div>
+
+        <div class="header-meta">
+          <div class="audio-controls" role="group" aria-label="Sound effects">
+            <button id="audio-toggle" type="button" aria-pressed="false">Sound off</button>
+            <label class="sr-only" for="audio-volume">Volume</label>
+            <input
+              id="audio-volume"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.22"
+              aria-label="Sound effect volume"
+              disabled
+            />
+            <output id="audio-status" class="visually-hidden">
+              Sound is off. Turn it on to hear optional effects.
+            </output>
+          </div>
+          <div class="runtime-badges" aria-labelledby="status-heading" aria-live="polite">
+            <h2 id="status-heading" class="visually-hidden">Runtime</h2>
+            <span class="badge">
+              <span class="visually-hidden">Game systems: </span>
+              <dd id="engine-status" data-status="pending">Checking…</dd>
+            </span>
+            <span class="badge">
+              <span class="visually-hidden">WebGL renderer: </span>
+              <dd id="webgl-status" data-status="pending">Checking…</dd>
+            </span>
+            <p id="runtime-message" class="visually-hidden">
+              Choose Campaign or Sandbox, then build and run a factory.
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <div class="game-workspace">
+        <aside class="left-rail" aria-label="Factory tools">
+          <div id="editor-toolbar" class="editor-toolbar" role="toolbar" aria-label="Build tools">
+            <button type="button" data-tool="SELECT" aria-pressed="true" title="Select (Esc)">
+              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 4l7 16 2.5-6.5L20 11 4 4z" />
+              </svg>
+              <span>Select</span>
+            </button>
+            <button type="button" data-tool="CONVEYOR" aria-pressed="false" title="Conveyor">
+              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="3" y="7" width="18" height="10" rx="2" />
+                <path d="M9 12h6m-2-2l2 2-2 2" />
+              </svg>
+              <span>Conveyor</span>
+            </button>
+            <button type="button" data-tool="PROCESSOR" aria-pressed="false" title="Processor">
+              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="4" y="4" width="16" height="16" rx="2" />
+                <path d="M9 9h6v6H9z" />
+              </svg>
+              <span>Processor</span>
+            </button>
+            <button type="button" data-tool="DIVERTER" aria-pressed="false" title="Diverter">
+              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 12h7m0 0l5-5m-5 5l5 5" />
+              </svg>
+              <span>Diverter</span>
+            </button>
+            <button type="button" data-tool="REMOVE" aria-pressed="false" title="Remove">
+              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+              <span>Remove</span>
+            </button>
+            <hr class="rail-divider" />
+            <button type="button" data-action="rotate" aria-keyshortcuts="R" title="Rotate (R)" disabled>
+              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 12a9 9 0 1 1-3-6.7L21 8" />
+                <path d="M21 3v5h-5" />
+              </svg>
+              <span>Rotate</span>
+            </button>
+            <button type="button" data-action="cancel" aria-keyshortcuts="Escape" title="Cancel tool (Esc)">
+              <span>Cancel</span>
+            </button>
+            <label class="dir-field" for="placement-direction">
+              <span>Dir</span>
+              <select id="placement-direction" aria-label="Placement direction">
+                <option value="N">North</option>
+                <option value="E" selected>East</option>
+                <option value="S">South</option>
+                <option value="W">West</option>
+              </select>
+            </label>
+          </div>
+        </aside>
+
+        <section class="viewport-center" aria-label="Factory preview">
+          <div class="viewport-toolbar">
+            <span class="board-badge">8 × 8 factory board</span>
+            <output id="selected-cell">Selected cell: none</output>
+            <div id="sandbox-controls" class="sandbox-controls" aria-label="Sandbox controls" hidden>
+              <label for="sandbox-source-mode">Source</label>
+              <select id="sandbox-source-mode" aria-label="Sandbox source sequence">
+                <option value="BLUE">Blue only</option>
+                <option value="AMBER">Amber only</option>
+                <option value="ALTERNATING">Alternating blue and amber</option>
+              </select>
+              <button id="clear-sandbox" type="button">Clear</button>
+              <button id="load-sandbox-example" type="button">Example</button>
+            </div>
+            <div class="zoom-controls" role="group" aria-label="Board zoom">
+              <button id="zoom-out" type="button" aria-label="Zoom out" title="Zoom out">-</button>
+              <button id="zoom-reset" type="button" aria-label="Reset zoom" title="Fit board">100%</button>
+              <button id="zoom-in" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+            </div>
+          </div>
+
+          <div class="scene-frame">
+            <canvas
+              id="factory-canvas"
+              aria-label="Isometric 8 by 8 factory grid. Place conveyors, processors, and diverters between the fixed source and outputs."
+              role="img"
+              tabindex="0"
+              aria-describedby="keyboard-help"
+            >
+              WebGL is not available. Please enable WebGL in your browser to play SHIFTWORKS.
+            </canvas>
+          </div>
+
+          <p id="keyboard-help" class="visually-hidden">
+            Keyboard: focus the board and press Space to start, pause, or resume. Press R to rotate a selected component and Escape to cancel the current tool. Use the zoom buttons or mouse wheel over the board.
+          </p>
+        </section>
+
+        <aside class="right-inspector" aria-label="Factory inspector">
+          <section class="inspector-card" aria-labelledby="lesson-heading">
+            <h2 id="lesson-heading">Objective</h2>
+            <p id="level-instructions"></p>
+            <output id="goal-status" class="simulation-message">No output goals configured.</output>
+          </section>
+
+          <section class="inspector-card" aria-labelledby="inventory-heading">
+            <h2 id="inventory-heading">Inventory</h2>
+            <ul id="inventory" class="inventory-list"></ul>
+          </section>
+
+          <section id="processor-rule-panel" class="inspector-card" aria-labelledby="processor-rules-heading" hidden>
+            <h2 id="processor-rules-heading">Processor recipes</h2>
+            <div class="rule-grid">
+              <label for="blue-rule-mode">Blue blank</label>
+              <select id="blue-rule-mode" data-rule="BLUE_BLANK">
+                <option value="NONE">No rule</option>
+                <option value="CUT">CUT</option>
+                <option value="PRESS">PRESS</option>
+              </select>
+              <label for="amber-rule-mode">Amber blank</label>
+              <select id="amber-rule-mode" data-rule="AMBER_BLANK">
+                <option value="NONE">No rule</option>
+                <option value="CUT">CUT</option>
+                <option value="PRESS">PRESS</option>
+              </select>
+            </div>
+            <button id="save-processor-rules" type="button">Save recipes</button>
+          </section>
+
+          <section id="diverter-rule-panel" class="inspector-card" aria-labelledby="diverter-rules-heading" hidden>
+            <h2 id="diverter-rules-heading">Diverter routes</h2>
+            <div class="rule-grid">
+              <label for="cut-route">Cut plate</label>
+              <select id="cut-route">
+                <option value="NONE">No rule</option>
+                <option value="A">A · front</option>
+                <option value="B">B · right</option>
+              </select>
+              <label for="pressed-route">Pressed block</label>
+              <select id="pressed-route">
+                <option value="NONE">No rule</option>
+                <option value="A">A · front</option>
+                <option value="B">B · right</option>
+              </select>
+            </div>
+            <button id="save-diverter-rules" type="button">Save routes</button>
+          </section>
+
+          <section id="result-panel" class="inspector-card result-card" aria-labelledby="result-heading" hidden>
+            <h2 id="result-heading">Factory complete</h2>
+            <output id="result-level-title"></output>
+            <output id="result-stars" aria-label="Star rating"></output>
+            <output id="result-summary" aria-live="polite"></output>
+            <div class="result-actions">
+              <button id="replay-simulation" type="button" disabled>Replay</button>
+              <button id="next-level" type="button" disabled>Next level</button>
+            </div>
+          </section>
+
+          <section class="inspector-card inspector-status" aria-labelledby="ports-heading">
+            <h2 id="ports-heading">Status &amp; Ports</h2>
+            <output id="machine-status" class="simulation-message">Processor: Idle</output>
+            <p id="connections" class="muted-note">
+              Ports face adjacent cells; connections appear automatically.
+            </p>
+            <output id="editor-feedback" class="editor-feedback" aria-live="polite">
+              Select a build tool, then click an empty cell. Press Escape to cancel a tool.
+            </output>
+            <output id="placement-feedback" class="placement-feedback" aria-live="off"></output>
+            <output id="storage-status" class="storage-status" aria-live="polite">
+              Progress and preferences save locally when storage is available.
+            </output>
+          </section>
+        </aside>
+      </div>
+
+      <footer class="bottom-bar" aria-label="Simulation controls">
+        <div class="simulation-buttons">
+          <button id="start-simulation" type="button" class="btn-primary">Start</button>
+          <button id="pause-simulation" type="button" disabled>Pause</button>
+          <button id="resume-simulation" type="button" disabled>Resume</button>
+          <button id="edit-simulation" type="button" disabled>Edit</button>
+          <button id="reset-simulation" type="button" disabled>Reset</button>
+        </div>
+        <div class="simulation-telemetry">
+          <output id="simulation-tick" class="simulation-tick">Tick 0</output>
+          <output id="simulation-metrics" class="simulation-metrics">
+            Ticks: 0 | Delivered: 0 | Rejected: 0 | Mode shifts: 0
+          </output>
+        </div>
+        <output id="simulation-message" class="simulation-message">
+          Start the factory to run deterministic simulation ticks.
+        </output>
+        <output
+          id="simulation-announcement"
+          class="visually-hidden"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        ></output>
+      </footer>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
