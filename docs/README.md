@@ -10,6 +10,7 @@
 | Design | `ux/`, `levels/` | UX, composição e progressão |
 | QA | `qa/` | Provas de aceite |
 | Execução | `roadmap/`, `reports/` | Gates, prompts e evidências |
+| Expansão | `expansion/` | Pacote SDD de expansão (`SW-101..SW-207`), prompts `00..23` e especificações |
 | Publicação | `release/` | Checklist legal e itch.io |
 
 **Processo de mudança:** pedido → especificação/requisito → decisão/ADR (se necessário) → código/teste → evidência/relatório → atualização de rastreabilidade.

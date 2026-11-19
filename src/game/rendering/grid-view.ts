@@ -1,4 +1,5 @@
 import {
+  BoxGeometry,
   BufferGeometry,
   DoubleSide,
   Group,
@@ -16,7 +17,7 @@ import {
   gridToWorld,
 } from '../domain/grid.model';
 
-const TILE_GAP = 0.035;
+const TILE_GAP = 0.045;
 const PICK_LAYER_NAME = 'grid-cell-pick-target';
 
 export class GridView {
@@ -41,18 +42,29 @@ export class GridView {
     }
 
     const world = gridToWorld(cell, this.dimensions, this.cellSize);
-    this.highlight.position.set(world.x, 0.065, world.z);
+    this.highlight.position.set(world.x, 0.068, world.z);
     this.highlight.visible = true;
   }
 
   private buildGrid(): void {
+    const boardWidth = this.dimensions.width * this.cellSize;
+    const boardHeight = this.dimensions.height * this.cellSize;
+
+    const plinth = new Mesh(
+      new BoxGeometry(boardWidth + 0.36, 0.16, boardHeight + 0.36),
+      new MeshStandardMaterial({ color: 0x1e293b, roughness: 0.85, metalness: 0.12 }),
+    );
+    plinth.name = 'factory-plinth';
+    plinth.position.y = -0.09;
+    this.group.add(plinth);
+
     const ground = new Mesh(
-      new PlaneGeometry(this.dimensions.width * this.cellSize, this.dimensions.height * this.cellSize),
-      new MeshStandardMaterial({ color: 0x182334, roughness: 0.94 }),
+      new PlaneGeometry(boardWidth + 0.08, boardHeight + 0.08),
+      new MeshStandardMaterial({ color: 0x152033, roughness: 0.92 }),
     );
     ground.name = 'factory-ground';
     ground.rotation.x = -Math.PI / 2;
-    ground.position.y = -0.04;
+    ground.position.y = -0.005;
     this.group.add(ground);
 
     for (let y = 0; y < this.dimensions.height; y += 1) {
@@ -71,9 +83,9 @@ export class GridView {
 
   private addTile(cell: GridCell, x: number, z: number, alternate: boolean): void {
     const material = new MeshStandardMaterial({
-      color: alternate ? 0x26364a : 0x202f41,
-      roughness: 0.88,
-      metalness: 0.04,
+      color: alternate ? 0x31455e : 0x26374d,
+      roughness: 0.82,
+      metalness: 0.06,
     });
     const tile = new Mesh(
       new PlaneGeometry(this.cellSize - TILE_GAP, this.cellSize - TILE_GAP),
@@ -81,7 +93,7 @@ export class GridView {
     );
     tile.name = `grid-tile-${cell.x}-${cell.y}`;
     tile.rotation.x = -Math.PI / 2;
-    tile.position.set(x, 0.005, z);
+    tile.position.set(x, 0.006, z);
     tile.receiveShadow = true;
     this.group.add(tile);
   }
@@ -105,17 +117,16 @@ export class GridView {
 
   private createHighlight(): Mesh<PlaneGeometry, MeshBasicMaterial> {
     return new Mesh(
-      new PlaneGeometry(this.cellSize - 0.12, this.cellSize - 0.12),
+      new PlaneGeometry(this.cellSize - 0.1, this.cellSize - 0.1),
       new MeshBasicMaterial({
-        color: 0xf5c96a,
+        color: 0xfbbf24,
         transparent: true,
-        opacity: 0.38,
+        opacity: 0.45,
         depthWrite: false,
         side: DoubleSide,
       }),
     );
   }
-
 }
 
 export function disposeSceneResources(scene: Scene): void {

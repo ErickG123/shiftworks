@@ -13,11 +13,11 @@
 
 ## L02 — One Machine, Two Jobs
 
-- Objetivo: `3 CUT_PLATE` e `3 PRESSED_BLOCK` em outputs compatíveis.
-- Elementos fixos: source alternada e saídas; parte do caminho pode estar pré-conectada.
-- Ferramentas: 1 Processor, poucas Conveyors; Diverter pode ser pré-configurado para concentrar-se em regras de máquina.
-- Ensinamentos: IF material THEN CUT/PRESS, custo de shift.
-- Aceite: visualizar alternância de modos ao longo dos itens; sem clique após Start.
+- Objetivo: `3 CUT_PLATE` e `3 PRESSED_BLOCK` em `dock` `(5, 3)`.
+- Elementos fixos: `source-1` alternada (`BLUE_BLANK`, `AMBER_BLANK`) em `(0, 3)` e `dock` em `(5, 3)`.
+- Ferramentas: `1 Processor` e `10 Conveyors` (`DIVERTER: 0`).
+- Ensinamentos: conectar o processador compartilhado com esteiras e programar `BLUE_BLANK → CUT` e `AMBER_BLANK → PRESS`, observando o custo de shift.
+- Aceite: múltiplas posições válidas para o processador ao longo da linha; visualizar alternância de modos sem clique após Start.
 
 ## L03 — Smart Routing
 
@@ -46,7 +46,7 @@ Measured with the checked-in reference layouts and the production simulation eng
 | Level | Ticks to RESULT | Items emitted/delivered | Mode shifts | Editable pieces |
 |---|---:|---:|---:|---:|
 | L01 | 30 | 3 / 3 | 0 | 6 |
-| L02 | 65 | 6 / 6 | 5 | 1 |
+| L02 | 68 | 6 / 6 | 5 | 4 |
 | L03 | 70 | 6 / 6 | 5 | 6 |
 
 The current three-star tick boundary is measured reference ticks + 1, so each reference finishes inside the strict < comparison. Three stars also require the measured piece budget and zero rejects. The reference fixtures assert these criteria; broader score-balance/playtest evidence remains outstanding.

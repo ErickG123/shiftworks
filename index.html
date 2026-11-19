@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,21 +21,21 @@
 
         <div class="header-controls">
           <label class="compact-field" for="game-mode-select">
-            <span>Mode</span>
+            <span>Modo</span>
             <select id="game-mode-select" aria-label="Choose game mode">
-              <option value="CAMPAIGN">Campaign</option>
+              <option value="CAMPAIGN">Campanha</option>
               <option value="SANDBOX">Sandbox</option>
             </select>
           </label>
           <label class="compact-field" for="level-select">
-            <span>Level</span>
+            <span>Fase</span>
             <select id="level-select" aria-label="Choose level"></select>
           </label>
         </div>
 
         <div class="header-meta">
           <div class="audio-controls" role="group" aria-label="Sound effects">
-            <button id="audio-toggle" type="button" aria-pressed="false">Sound off</button>
+            <button id="audio-toggle" type="button" aria-pressed="false">Som desligado</button>
             <label class="sr-only" for="audio-volume">Volume</label>
             <input
               id="audio-volume"
@@ -51,7 +51,7 @@
               Sound is off. Turn it on to hear optional effects.
             </output>
           </div>
-          <div class="runtime-badges" aria-labelledby="status-heading" aria-live="polite">
+          <div class="runtime-badges visually-hidden" aria-labelledby="status-heading" aria-live="polite">
             <h2 id="status-heading" class="visually-hidden">Runtime</h2>
             <span class="badge">
               <span class="visually-hidden">Game systems: </span>
@@ -70,57 +70,168 @@
 
       <div class="game-workspace">
         <aside class="left-rail" aria-label="Factory tools">
+          <div id="editor-target-mode" class="editor-target-mode" aria-live="polite">
+            Modo Seleção / Inspeção
+          </div>
           <div id="editor-toolbar" class="editor-toolbar" role="toolbar" aria-label="Build tools">
-            <button type="button" data-tool="SELECT" aria-pressed="true" title="Select (Esc)">
-              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M4 4l7 16 2.5-6.5L20 11 4 4z" />
-              </svg>
-              <span>Select</span>
+            <span class="tool-group-label" data-i18n="hud.groupSelect">Seleção</span>
+            <button type="button" data-tool="SELECT" aria-pressed="true" title="Selecionar (Esc)">
+              <div class="tool-btn-main">
+                <svg
+                  class="tool-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M4 4l7 16 2.5-6.5L20 11 4 4z" />
+                </svg>
+                <span class="tool-label">Selecionar</span>
+              </div>
+              <small class="tool-meta" data-tool-meta>Esc</small>
             </button>
-            <button type="button" data-tool="CONVEYOR" aria-pressed="false" title="Conveyor">
-              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <rect x="3" y="7" width="18" height="10" rx="2" />
-                <path d="M9 12h6m-2-2l2 2-2 2" />
-              </svg>
-              <span>Conveyor</span>
+            <span class="tool-group-label" data-i18n="hud.groupBuild">Construção</span>
+            <button type="button" data-tool="CONVEYOR" aria-pressed="false" title="Esteira">
+              <div class="tool-btn-main">
+                <svg
+                  class="tool-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="7" width="18" height="10" rx="2" />
+                  <path d="M9 12h6m-2-2l2 2-2 2" />
+                </svg>
+                <span class="tool-label">Esteira</span>
+                <strong class="tool-count-badge" data-tool-count="CONVEYOR">0</strong>
+              </div>
+              <small class="tool-meta" data-tool-reason="CONVEYOR"></small>
             </button>
-            <button type="button" data-tool="PROCESSOR" aria-pressed="false" title="Processor">
-              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <rect x="4" y="4" width="16" height="16" rx="2" />
-                <path d="M9 9h6v6H9z" />
-              </svg>
-              <span>Processor</span>
+            <button type="button" data-tool="PROCESSOR" aria-pressed="false" title="Processador">
+              <div class="tool-btn-main">
+                <svg
+                  class="tool-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <rect x="4" y="4" width="16" height="16" rx="2" />
+                  <path d="M9 9h6v6H9z" />
+                </svg>
+                <span class="tool-label">Processador</span>
+                <strong class="tool-count-badge" data-tool-count="PROCESSOR">0</strong>
+              </div>
+              <small class="tool-meta" data-tool-reason="PROCESSOR"></small>
             </button>
-            <button type="button" data-tool="DIVERTER" aria-pressed="false" title="Diverter">
-              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M4 12h7m0 0l5-5m-5 5l5 5" />
-              </svg>
-              <span>Diverter</span>
+            <button type="button" data-tool="DIVERTER" aria-pressed="false" title="Desviador">
+              <div class="tool-btn-main">
+                <svg
+                  class="tool-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M4 12h7m0 0l5-5m-5 5l5 5" />
+                </svg>
+                <span class="tool-label">Desviador</span>
+                <strong class="tool-count-badge" data-tool-count="DIVERTER">0</strong>
+              </div>
+              <small class="tool-meta" data-tool-reason="DIVERTER"></small>
             </button>
-            <button type="button" data-tool="REMOVE" aria-pressed="false" title="Remove">
-              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M6 6l12 12M18 6L6 18" />
-              </svg>
-              <span>Remove</span>
+            <span class="tool-group-label" data-i18n="hud.groupEdit">Edição</span>
+            <button type="button" data-tool="REMOVE" aria-pressed="false" title="Remover">
+              <div class="tool-btn-main">
+                <svg
+                  class="tool-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+                <span class="tool-label">Remover</span>
+              </div>
+              <small class="tool-meta" data-tool-reason="REMOVE"></small>
             </button>
             <hr class="rail-divider" />
-            <button type="button" data-action="rotate" aria-keyshortcuts="R" title="Rotate (R)" disabled>
-              <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M21 12a9 9 0 1 1-3-6.7L21 8" />
-                <path d="M21 3v5h-5" />
-              </svg>
-              <span>Rotate</span>
+            <button
+              type="button"
+              data-action="rotate"
+              aria-keyshortcuts="R"
+              title="Girar peça ou prévia (R)"
+              disabled
+            >
+              <div class="tool-btn-main">
+                <svg
+                  class="tool-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M21 12a9 9 0 1 1-3-6.7L21 8" />
+                  <path d="M21 3v5h-5" />
+                </svg>
+                <span class="tool-label">Girar (R)</span>
+              </div>
             </button>
-            <button type="button" data-action="cancel" aria-keyshortcuts="Escape" title="Cancel tool (Esc)">
-              <span>Cancel</span>
+            <button
+              type="button"
+              data-action="cancel"
+              aria-keyshortcuts="Escape"
+              title="Cancelar ferramenta (Esc)"
+            >
+              <div class="tool-btn-main">
+                <span class="tool-label">Cancelar</span>
+              </div>
             </button>
+            <div class="undo-redo-row">
+              <button
+                type="button"
+                id="editor-undo"
+                data-action="undo"
+                aria-keyshortcuts="Control+Z"
+                title="Desfazer (Ctrl+Z)"
+                disabled
+              >
+                ↶
+              </button>
+              <button
+                type="button"
+                id="editor-redo"
+                data-action="redo"
+                aria-keyshortcuts="Control+Y"
+                title="Refazer (Ctrl+Y)"
+                disabled
+              >
+                ↷
+              </button>
+              <button
+                type="button"
+                id="equipment-info-btn"
+                data-action="equipment-info"
+                title="Ver demonstração 3D de funcionamento"
+              >
+                ?
+              </button>
+            </div>
             <label class="dir-field" for="placement-direction">
-              <span>Dir</span>
+              <span>Direção</span>
               <select id="placement-direction" aria-label="Placement direction">
-                <option value="N">North</option>
-                <option value="E" selected>East</option>
-                <option value="S">South</option>
-                <option value="W">West</option>
+                <option value="N">Norte (N)</option>
+                <option value="E" selected>Leste (E)</option>
+                <option value="S">Sul (S)</option>
+                <option value="W">Oeste (W)</option>
               </select>
             </label>
           </div>
@@ -128,22 +239,78 @@
 
         <section class="viewport-center" aria-label="Factory preview">
           <div class="viewport-toolbar">
-            <span class="board-badge">8 × 8 factory board</span>
-            <output id="selected-cell">Selected cell: none</output>
-            <div id="sandbox-controls" class="sandbox-controls" aria-label="Sandbox controls" hidden>
-              <label for="sandbox-source-mode">Source</label>
-              <select id="sandbox-source-mode" aria-label="Sandbox source sequence">
-                <option value="BLUE">Blue only</option>
-                <option value="AMBER">Amber only</option>
-                <option value="ALTERNATING">Alternating blue and amber</option>
-              </select>
-              <button id="clear-sandbox" type="button">Clear</button>
-              <button id="load-sandbox-example" type="button">Example</button>
+            <div class="viewport-toolbar-left">
+              <span class="board-badge">Tabuleiro 8 × 8</span>
+              <output id="selected-cell">Célula: nenhuma</output>
+              <span id="camera-angle-indicator" class="camera-angle-badge">Visão 45°</span>
             </div>
-            <div class="zoom-controls" role="group" aria-label="Board zoom">
+
+            <details class="controls-hint-popover">
+              <summary id="controls-hint-summary" data-i18n="hud.controlsHintSummary">Atalhos</summary>
+              <span id="camera-controls-hint" class="camera-controls-hint">
+                WASD: Mover câmera · Q/E: Girar visão 90° · R: Girar peça · Scroll: Zoom
+              </span>
+            </details>
+
+            <div
+              id="sandbox-controls"
+              class="sandbox-controls"
+              aria-label="Sandbox controls"
+              hidden
+            >
+              <label for="sandbox-source-mode">Fonte</label>
+              <select id="sandbox-source-mode" aria-label="Sandbox source sequence">
+                <option value="BLUE">Apenas bloco azul</option>
+                <option value="AMBER">Apenas bloco âmbar</option>
+                <option value="ALTERNATING">Alternando azul e âmbar</option>
+              </select>
+              <button id="clear-sandbox" type="button">Limpar</button>
+              <button id="load-sandbox-example" type="button">Carregar exemplo</button>
+            </div>
+
+            <div class="zoom-controls" role="group" aria-label="Board camera and zoom">
+              <button
+                id="camera-rotate-left"
+                type="button"
+                aria-keyshortcuts="Q"
+                aria-label="Rotate camera 90° left (Q)"
+                title="Girar câmera 90° à esquerda (Q)"
+              >
+                Q ↺
+              </button>
+              <button
+                id="camera-rotate-right"
+                type="button"
+                aria-keyshortcuts="E"
+                aria-label="Rotate camera 90° right (E)"
+                title="Girar câmera 90° à direita (E)"
+              >
+                E ↻
+              </button>
               <button id="zoom-out" type="button" aria-label="Zoom out" title="Zoom out">-</button>
-              <button id="zoom-reset" type="button" aria-label="Reset zoom" title="Fit board">100%</button>
+              <button id="zoom-reset" type="button" aria-label="Reset camera and zoom" title="Centralizar câmera">
+                100%
+              </button>
               <button id="zoom-in" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+              <button
+                id="toggle-inspector-btn"
+                type="button"
+                aria-expanded="true"
+                aria-controls="right-inspector-panel"
+                data-i18n="hud.toggleInspector"
+              >
+                Painel
+              </button>
+            </div>
+          </div>
+
+          <div id="paused-callout-banner" class="paused-callout-banner" hidden>
+            <span id="paused-callout-text">
+              Simulação pausada. Inspecione o tabuleiro, retome a produção ou volte ao modo de edição.
+            </span>
+            <div class="paused-callout-actions">
+              <button id="paused-resume-cta" type="button">Retomar</button>
+              <button id="paused-edit-cta" type="button" class="btn-primary">Editar fábrica</button>
             </div>
           </div>
 
@@ -160,104 +327,217 @@
           </div>
 
           <p id="keyboard-help" class="visually-hidden">
-            Keyboard: focus the board and press Space to start, pause, or resume. Press R to rotate a selected component and Escape to cancel the current tool. Use the zoom buttons or mouse wheel over the board.
+            Keyboard: WASD pans the camera, Q and E rotate the camera in 90-degree steps, R rotates the active ghost preview or selected component, Space starts or pauses the simulation, and Escape cancels the active build tool.
           </p>
         </section>
 
-        <aside class="right-inspector" aria-label="Factory inspector">
-          <section class="inspector-card" aria-labelledby="lesson-heading">
-            <h2 id="lesson-heading">Objective</h2>
+        <aside id="right-inspector-panel" class="right-inspector" aria-label="Factory inspector">
+          <div class="inspector-tabs" role="tablist" aria-label="Inspector sections">
+            <button type="button" role="tab" data-inspector-tab="objective" aria-selected="true" data-i18n="hud.tabObjective">Objetivo</button>
+            <button type="button" role="tab" data-inspector-tab="selection" aria-selected="false" data-i18n="hud.tabSelection">Seleção</button>
+            <button type="button" role="tab" data-inspector-tab="diagnostics" aria-selected="false" data-i18n="hud.tabDiagnostics">Diagnóstico</button>
+            <button type="button" role="tab" data-inspector-tab="resources" aria-selected="false" data-i18n="hud.tabResources">Recursos</button>
+          </div>
+          <div class="inspector-tab-pane" data-inspector-pane="objective">
+          <section class="inspector-card objective-card" aria-labelledby="lesson-heading">
+            <h2 id="lesson-heading">Objetivo da Fase</h2>
             <p id="level-instructions"></p>
-            <output id="goal-status" class="simulation-message">No output goals configured.</output>
+            <output id="goal-status" class="goal-status-pill">No output goals configured.</output>
+          </section>
+          </div>
+
+          <div class="inspector-tab-pane" data-inspector-pane="selection" hidden>
+          <section
+            id="selected-component-card"
+            class="inspector-card"
+            aria-labelledby="selected-component-heading"
+          >
+            <h2 id="selected-component-heading">Inspetor de Peça</h2>
+            <p id="selected-component-details" class="selected-component-details">
+              Nenhuma peça selecionada.
+            </p>
           </section>
 
-          <section class="inspector-card" aria-labelledby="inventory-heading">
-            <h2 id="inventory-heading">Inventory</h2>
-            <ul id="inventory" class="inventory-list"></ul>
-          </section>
-
-          <section id="processor-rule-panel" class="inspector-card" aria-labelledby="processor-rules-heading" hidden>
-            <h2 id="processor-rules-heading">Processor recipes</h2>
+          <section
+            id="processor-rule-panel"
+            class="inspector-card rule-card"
+            aria-labelledby="processor-rules-heading"
+            hidden
+          >
+            <h2 id="processor-rules-heading">Receitas do Processador SHIFT</h2>
             <div class="rule-grid">
-              <label for="blue-rule-mode">Blue blank</label>
+              <label for="blue-rule-mode">Bloco azul</label>
               <select id="blue-rule-mode" data-rule="BLUE_BLANK">
-                <option value="NONE">No rule</option>
-                <option value="CUT">CUT</option>
-                <option value="PRESS">PRESS</option>
+                <option value="NONE">Sem regra</option>
+                <option value="CUT">CORTE (Placa cortada)</option>
+                <option value="PRESS">PRENSA (Bloco prensado)</option>
               </select>
-              <label for="amber-rule-mode">Amber blank</label>
+              <label for="amber-rule-mode">Bloco âmbar</label>
               <select id="amber-rule-mode" data-rule="AMBER_BLANK">
-                <option value="NONE">No rule</option>
-                <option value="CUT">CUT</option>
-                <option value="PRESS">PRESS</option>
+                <option value="NONE">Sem regra</option>
+                <option value="CUT">CORTE (Placa cortada)</option>
+                <option value="PRESS">PRENSA (Bloco prensado)</option>
               </select>
             </div>
-            <button id="save-processor-rules" type="button">Save recipes</button>
+            <button id="save-processor-rules" type="button" class="btn-primary">
+              Salvar receitas
+            </button>
           </section>
 
-          <section id="diverter-rule-panel" class="inspector-card" aria-labelledby="diverter-rules-heading" hidden>
-            <h2 id="diverter-rules-heading">Diverter routes</h2>
+          <section
+            id="diverter-rule-panel"
+            class="inspector-card rule-card"
+            aria-labelledby="diverter-rules-heading"
+            hidden
+          >
+            <h2 id="diverter-rules-heading">Rotas do Desviador</h2>
             <div class="rule-grid">
-              <label for="cut-route">Cut plate</label>
+              <label for="cut-route">Placa cortada</label>
               <select id="cut-route">
-                <option value="NONE">No rule</option>
-                <option value="A">A · front</option>
-                <option value="B">B · right</option>
+                <option value="NONE">Sem regra</option>
+                <option value="A">A · frente</option>
+                <option value="B">B · direita</option>
               </select>
-              <label for="pressed-route">Pressed block</label>
+              <label for="pressed-route">Bloco prensado</label>
               <select id="pressed-route">
-                <option value="NONE">No rule</option>
-                <option value="A">A · front</option>
-                <option value="B">B · right</option>
+                <option value="NONE">Sem regra</option>
+                <option value="A">A · frente</option>
+                <option value="B">B · direita</option>
               </select>
             </div>
-            <button id="save-diverter-rules" type="button">Save routes</button>
+            <button id="save-diverter-rules" type="button" class="btn-primary">Salvar rotas</button>
           </section>
+          </div>
 
-          <section id="result-panel" class="inspector-card result-card" aria-labelledby="result-heading" hidden>
-            <h2 id="result-heading">Factory complete</h2>
-            <output id="result-level-title"></output>
-            <output id="result-stars" aria-label="Star rating"></output>
-            <output id="result-summary" aria-live="polite"></output>
-            <div class="result-actions">
-              <button id="replay-simulation" type="button" disabled>Replay</button>
-              <button id="next-level" type="button" disabled>Next level</button>
-            </div>
-          </section>
-
+          <div class="inspector-tab-pane" data-inspector-pane="diagnostics" hidden>
           <section class="inspector-card inspector-status" aria-labelledby="ports-heading">
-            <h2 id="ports-heading">Status &amp; Ports</h2>
-            <output id="machine-status" class="simulation-message">Processor: Idle</output>
+            <h2 id="ports-heading">Diagnóstico e Portas</h2>
+            <output id="machine-status" class="simulation-message">Processador: Ocioso</output>
             <p id="connections" class="muted-note">
-              Ports face adjacent cells; connections appear automatically.
+              As portas conectam-se às células adjacentes automaticamente.
             </p>
             <output id="editor-feedback" class="editor-feedback" aria-live="polite">
-              Select a build tool, then click an empty cell. Press Escape to cancel a tool.
+              Selecione uma ferramenta à esquerda, use R para girar a prévia e clique em uma célula vazia.
             </output>
             <output id="placement-feedback" class="placement-feedback" aria-live="off"></output>
-            <output id="storage-status" class="storage-status" aria-live="polite">
-              Progress and preferences save locally when storage is available.
-            </output>
           </section>
+          </div>
+
+          <div class="inspector-tab-pane" data-inspector-pane="resources" hidden>
+          <details class="inspector-card inspector-collapsible" open>
+            <summary id="inventory-heading" class="inspector-summary">Orçamento de Peças</summary>
+            <ul id="inventory" class="inventory-list"></ul>
+            <output id="storage-status" class="storage-status" aria-live="polite">
+              Progresso e preferências são salvos localmente quando disponível.
+            </output>
+          </details>
+          </div>
         </aside>
       </div>
 
+      <!-- Dedicated Central Victory Overlay -->
+      <section
+        id="result-panel"
+        class="victory-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="result-heading"
+        hidden
+      >
+        <div class="victory-dialog-card">
+          <header class="victory-header">
+            <span id="result-eyebrow" class="eyebrow">PEDIDO DE PRODUÇÃO CONCLUÍDO</span>
+            <h2 id="result-heading" class="victory-title">Fábrica concluída!</h2>
+            <output id="result-level-title" class="victory-level-badge"></output>
+            <p id="result-subtitle" class="victory-subtitle">
+              Sua linha automatizada entregou todos os produtos exigidos sem intervenção.
+            </p>
+          </header>
+
+          <div class="victory-stars-block">
+            <div id="result-stars-visual" class="victory-stars-visual" aria-hidden="true">
+              <svg class="victory-star-svg" data-star-index="1" viewBox="0 0 24 24">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                />
+              </svg>
+              <svg class="victory-star-svg" data-star-index="2" viewBox="0 0 24 24">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                />
+              </svg>
+              <svg class="victory-star-svg" data-star-index="3" viewBox="0 0 24 24">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                />
+              </svg>
+            </div>
+            <output id="result-stars" class="victory-stars-text" aria-label="Star rating"></output>
+            <output id="result-record-badge" class="victory-record-badge"></output>
+          </div>
+
+          <div class="victory-stats-grid">
+            <div class="victory-stat-box">
+              <span id="stat-cycles-label" class="victory-stat-label">Ciclos totais</span>
+              <strong id="stat-cycles-value" class="victory-stat-value">0</strong>
+            </div>
+            <div class="victory-stat-box">
+              <span id="stat-delivered-label" class="victory-stat-label">Itens entregues</span>
+              <strong id="stat-delivered-value" class="victory-stat-value">0</strong>
+            </div>
+            <div class="victory-stat-box">
+              <span id="stat-rejected-label" class="victory-stat-label">Rejeitados</span>
+              <strong id="stat-rejected-value" class="victory-stat-value">0</strong>
+            </div>
+            <div class="victory-stat-box">
+              <span id="stat-shifts-label" class="victory-stat-label">Trocas SHIFT</span>
+              <strong id="stat-shifts-value" class="victory-stat-value">0</strong>
+            </div>
+            <div class="victory-stat-box">
+              <span id="stat-pieces-label" class="victory-stat-label">Peças usadas</span>
+              <strong id="stat-pieces-value" class="victory-stat-value">0</strong>
+            </div>
+          </div>
+
+          <output id="result-summary" class="victory-summary-line" aria-live="polite"></output>
+
+          <div class="result-actions victory-actions">
+            <button id="next-level" type="button" class="btn-primary" disabled>
+              Próxima fase
+            </button>
+            <button id="replay-simulation" type="button" disabled>Repetir fase</button>
+            <button id="result-edit-factory" type="button">Editar fábrica</button>
+            <button id="result-level-select" type="button">Selecionar fase</button>
+            <button id="result-main-menu" type="button">Menu principal</button>
+          </div>
+        </div>
+      </section>
+
       <footer class="bottom-bar" aria-label="Simulation controls">
         <div class="simulation-buttons">
-          <button id="start-simulation" type="button" class="btn-primary">Start</button>
-          <button id="pause-simulation" type="button" disabled>Pause</button>
-          <button id="resume-simulation" type="button" disabled>Resume</button>
-          <button id="edit-simulation" type="button" disabled>Edit</button>
-          <button id="reset-simulation" type="button" disabled>Reset</button>
+          <span id="session-mode-badge" class="session-mode-badge" data-mode="EDITING">
+            MODO EDIÇÃO
+          </span>
+          <button id="start-simulation" type="button" class="btn-primary">Iniciar</button>
+          <button id="pause-simulation" type="button" disabled>Pausar</button>
+          <button id="resume-simulation" type="button" disabled>Retomar</button>
+          <button id="step-simulation" type="button" disabled>+1 Ciclo</button>
+          <button id="edit-simulation" type="button" disabled>Editar fábrica</button>
+          <button id="reset-simulation" type="button" disabled>Reiniciar tentativa</button>
+          <select id="simulation-speed" aria-label="Simulation speed" class="speed-select">
+            <option value="1" selected>1×</option>
+            <option value="2">2×</option>
+            <option value="4">4×</option>
+          </select>
         </div>
         <div class="simulation-telemetry">
-          <output id="simulation-tick" class="simulation-tick">Tick 0</output>
+          <output id="simulation-tick" class="simulation-tick">Ciclo 0</output>
           <output id="simulation-metrics" class="simulation-metrics">
-            Ticks: 0 | Delivered: 0 | Rejected: 0 | Mode shifts: 0
+            Ciclos: 0 · Entregues: 0 · Rejeitados: 0 · Trocas de modo: 0 · Peças: 0
           </output>
         </div>
         <output id="simulation-message" class="simulation-message">
-          Start the factory to run deterministic simulation ticks.
+          Monte a linha de produção e pressione Iniciar (ou Espaço) para rodar a simulação.
         </output>
         <output
           id="simulation-announcement"

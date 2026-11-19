@@ -1,0 +1,26 @@
+# Índice de prompts
+
+- **00** — [Auditoria do estado atual, estabilização e rastreabilidade](00-auditoria-baseline-e-bugs.md) — SW-207 + base de todos; prioridade P0; deps nenhuma
+- **01** — [Especificações da expansão, contratos e manutenção de .agents](01-especificacao-contratos-e-governanca.md) — SW-101..SW-207; prioridade P0; deps 00
+- **02** — [Construção de esteiras por arrastar, ghost, rotação, Undo/Redo](02-construcao-por-arrasto-undo-redo.md) — SW-101; prioridade P0; deps 00,01
+- **03** — [Overlay de fluxo e auditoria visual de conexões](03-visualizacao-de-fluxo-e-conexoes.md) — SW-102; prioridade P1; deps 02
+- **04** — [Inspetor contextual e estado de máquinas e itens](04-inspetor-contextual-de-maquinas.md) — SW-103; prioridade P1; deps 03
+- **05** — [Passo a passo por ticks e velocidades determinísticas](05-simulacao-passo-a-passo.md) — SW-108; prioridade P0; deps 04
+- **06** — [Diagnóstico visual de gargalos e causas de bloqueio](06-diagnostico-de-gargalos.md) — SW-109; prioridade P1; deps 05
+- **07** — [Painel de eficiência e métricas honestas](07-painel-de-eficiencia.md) — SW-110; prioridade P1; deps 05,06
+- **08** — [Catálogo de equipamentos, tooltips e microdescrições](08-catalogo-e-tooltips-educativos.md) — SW-201, SW-202; prioridade P0; deps 04,07
+- **09** — [Card flutuante com vitrine Three.js animada por equipamento](09-card-flutuante-preview-3d.md) — SW-203; prioridade P0; deps 08
+- **10** — [Tutorial guiado, lições interativas e ajuda contextual](10-tutorial-aprendizagem-onboarding.md) — SW-204; prioridade P0; deps 08,09,02
+- **11** — [Progressão persistente, desbloqueio de equipamentos e conquistas](11-progressao-unlocks-conquistas.md) — SW-205; prioridade P0; deps 01,10,07
+- **12** — [Campanha por setores e expansão de níveis com conteúdo validado](12-setores-campanha-e-niveis.md) — SW-111; prioridade P2; deps 11,07
+- **13** — [Desafios opcionais, estrelas e objetivos secundários](13-desafios-opcionais-e-estrelas.md) — SW-112; prioridade P2; deps 11,12,07
+- **14** — [Sensores independentes e regras visuais de automação](14-sensores-programaveis.md) — SW-104; prioridade P2; deps 01,05,06,11
+- **15** — [Múltiplas receitas e transformações encadeadas](15-receitas-encadeadas-maquinas.md) — SW-105; prioridade P2; deps 14,07
+- **16** — [Buffers, filas e armazenamento intermediário](16-buffers-armazenamento.md) — SW-107; prioridade P2; deps 15,05,06
+- **17** — [Pedidos dinâmicos e adaptação automática de produção](17-pedidos-dinamicos-production-shift.md) — SW-106; prioridade P2; deps 14,15,16
+- **18** — [Projetos/blueprints de fábrica e reaproveitamento](18-blueprints-de-fabrica.md) — SW-113; prioridade P2; deps 02,11,15,16
+- **19** — [Sandbox expandido e experimentação livre](19-sandbox-expandido.md) — SW-114; prioridade P2; deps 18,15,16,17
+- **20** — [Desafios de eficiência, score e classificação local](20-desafios-de-eficiencia.md) — SW-115; prioridade P2; deps 13,17,07
+- **21** — [Polimento global de gameplay, ajuda, feedback, câmera e resultados](21-polimento-ui-ux-acessibilidade.md) — SW-206; prioridade P1; deps 02..20 concluídas ou planejadas, 10,11
+- **22** — [Auditoria final de regressão, determinismo, testes e performance](22-qualidade-regressao-performance.md) — SW-207 + validação SW-101..SW-206; prioridade P0 gate final; deps 00..21 conforme escopo executado
+- **23** — [Consolidação SDD, release seguro e estratégia pós-jam](23-documentacao-release-e-consolidacao.md) — todos os SW, documentação e publicação; prioridade P0/P2; deps 22

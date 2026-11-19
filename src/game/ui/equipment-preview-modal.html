@@ -1,0 +1,30 @@
+<div
+  class="equipment-preview-card"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="preview-card-title"
+>
+  <header class="preview-card-header">
+    <div>
+      <span class="eyebrow" data-i18n="preview.eyebrow"></span>
+      <h2 id="preview-card-title"></h2>
+    </div>
+    <button type="button" id="preview-close-btn" data-i18n="common.close"></button>
+  </header>
+
+  <div class="preview-canvas-wrap">
+    <canvas id="equipment-preview-canvas" width="380" height="220"></canvas>
+    <span id="preview-step-caption" class="preview-step-caption"></span>
+  </div>
+
+  <div class="preview-card-body">
+    <p id="preview-summary" class="preview-summary"></p>
+    <p id="preview-usage" class="preview-usage"></p>
+    <p id="preview-ports" class="preview-ports"></p>
+  </div>
+
+  <footer class="preview-card-footer">
+    <button type="button" id="preview-toggle-play" class="btn-primary"></button>
+    <button type="button" id="preview-reset-demo" data-i18n="preview.reset"></button>
+  </footer>
+</div>

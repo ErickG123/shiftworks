@@ -175,15 +175,18 @@ Se não houver movimentação, processamento nem emissão possível por um núme
 | Ação | Entrada |
 |---|---|
 | Colocar / selecionar | Clique esquerdo |
-| Remover | Clique direito no modo de edição |
-| Rotacionar peça selecionada | R |
-| Iniciar / pausar | Espaço, quando foco não estiver em input |
-| Cancelar ferramenta | Esc |
-| Zoom | Roda do mouse |
+| Remover | Ferramenta Remover + clique esquerdo |
+| Rotacionar peça selecionada ou prévia (ghost) | R (ou botão Girar) |
+| Mover câmera pelo tabuleiro (pan horizontal) | W / A / S / D |
+| Girar visão da câmera em passos de 90° | Q (esquerda) / E (direita) |
+| Centralizar câmera / resetar zoom | Home ou botão 100% |
+| Iniciar / pausar / retomar | Espaço, quando foco não estiver em input/select/modal |
+| Cancelar ferramenta / fechar overlay | Esc |
+| Zoom | Roda do mouse ou botões `-` / `+` |
 | Alternar ferramenta | Clique na toolbar |
-| Reiniciar tentativa | Botão Reiniciar |
+| Voltar à edição / reiniciar tentativa | Botões Editar fábrica / Reiniciar tentativa |
 
-Câmera ortográfica em 45° de azimute e inclinação aproximada de 35°; pan opcional por botão do meio, com direções intuitivas e sem inversão; clamp de zoom. Rotação livre da câmera não é essencial e fica fora do MVP.
+Câmera ortográfica em 45° de azimute inicial e inclinação aproximada de 35°; pan horizontal relativo à orientação atual da câmera por `W/A/S/D` sem inversão; rotação orbital horizontal discreta em passos de 90° por `Q/E`; clamp de pan e zoom. A tecla `R` é exclusiva para rotação de peças/prévia e nunca altera a câmera.
 
 ### UX necessária
 
@@ -200,7 +203,7 @@ Três fases fechadas são obrigatórias; quarta e quinta apenas se houver tempo.
 | Fase | Nome | Lição | Pedido / restrição |
 |---|---|---|---|
 | 01 | First Line | Posicionamento e direção de esteiras | Levar 3 Blue Blanks ao destino por rota simples; sem processador (tutorial de transporte) |
-| 02 | One Machine, Two Jobs | Programar o SHIFT Processor | Transformar 3 Blue Blanks em Cut Plates e 3 Amber Blanks em Pressed Blocks; fonte alterna tipos; saídas próximas, pré-conectadas para focar na lógica |
+| 02 | One Machine, Two Jobs | Programar o SHIFT Processor e conectá-lo com esteiras | Transformar 3 Blue Blanks em Cut Plates e 3 Amber Blanks em Pressed Blocks; fonte alterna tipos; 1 Processor compartilhado e orçamento de 10 esteiras para conectar fonte, processador e doca em múltiplos layouts possíveis |
 | 03 | Smart Routing | Integrar processamento e desviador | Entregar 3 plates em A e 3 blocks em B; terreno 8×8, limite de esteiras e um único processador |
 | 04 (extra) | Tight Space | Otimização espacial | Mesmo pedido, obstáculos e orçamento reduzido |
 | 05 (extra) | Rush Order | Mudança de demanda | Quantidades desiguais e objetivo adicional de ciclos |

@@ -1,0 +1,205 @@
+{
+  "title": "SHIFTWORKS — SDD expansão 15 melhorias + tutorial/preview/unlocks",
+  "version": "1.0.0",
+  "created_on": "2026-11-18",
+  "prompts": [
+    {
+      "n": 0,
+      "slug": "auditoria-baseline-e-bugs",
+      "name": "Auditoria do estado atual, estabilização e rastreabilidade",
+      "req": "SW-207 + base de todos",
+      "priority": "P0",
+      "depends": "nenhuma"
+    },
+    {
+      "n": 1,
+      "slug": "especificacao-contratos-e-governanca",
+      "name": "Especificações da expansão, contratos e manutenção de .agents",
+      "req": "SW-101..SW-207",
+      "priority": "P0",
+      "depends": "00"
+    },
+    {
+      "n": 2,
+      "slug": "construcao-por-arrasto-undo-redo",
+      "name": "Construção de esteiras por arrastar, ghost, rotação, Undo/Redo",
+      "req": "SW-101",
+      "priority": "P0",
+      "depends": "00,01"
+    },
+    {
+      "n": 3,
+      "slug": "visualizacao-de-fluxo-e-conexoes",
+      "name": "Overlay de fluxo e auditoria visual de conexões",
+      "req": "SW-102",
+      "priority": "P1",
+      "depends": "02"
+    },
+    {
+      "n": 4,
+      "slug": "inspetor-contextual-de-maquinas",
+      "name": "Inspetor contextual e estado de máquinas e itens",
+      "req": "SW-103",
+      "priority": "P1",
+      "depends": "03"
+    },
+    {
+      "n": 5,
+      "slug": "simulacao-passo-a-passo",
+      "name": "Passo a passo por ticks e velocidades determinísticas",
+      "req": "SW-108",
+      "priority": "P0",
+      "depends": "04"
+    },
+    {
+      "n": 6,
+      "slug": "diagnostico-de-gargalos",
+      "name": "Diagnóstico visual de gargalos e causas de bloqueio",
+      "req": "SW-109",
+      "priority": "P1",
+      "depends": "05"
+    },
+    {
+      "n": 7,
+      "slug": "painel-de-eficiencia",
+      "name": "Painel de eficiência e métricas honestas",
+      "req": "SW-110",
+      "priority": "P1",
+      "depends": "05,06"
+    },
+    {
+      "n": 8,
+      "slug": "catalogo-e-tooltips-educativos",
+      "name": "Catálogo de equipamentos, tooltips e microdescrições",
+      "req": "SW-201, SW-202",
+      "priority": "P0",
+      "depends": "04,07"
+    },
+    {
+      "n": 9,
+      "slug": "card-flutuante-preview-3d",
+      "name": "Card flutuante com vitrine Three.js animada por equipamento",
+      "req": "SW-203",
+      "priority": "P0",
+      "depends": "08"
+    },
+    {
+      "n": 10,
+      "slug": "tutorial-aprendizagem-onboarding",
+      "name": "Tutorial guiado, lições interativas e ajuda contextual",
+      "req": "SW-204",
+      "priority": "P0",
+      "depends": "08,09,02"
+    },
+    {
+      "n": 11,
+      "slug": "progressao-unlocks-conquistas",
+      "name": "Progressão persistente, desbloqueio de equipamentos e conquistas",
+      "req": "SW-205",
+      "priority": "P0",
+      "depends": "01,10,07"
+    },
+    {
+      "n": 12,
+      "slug": "setores-campanha-e-niveis",
+      "name": "Campanha por setores e expansão de níveis com conteúdo validado",
+      "req": "SW-111",
+      "priority": "P2",
+      "depends": "11,07"
+    },
+    {
+      "n": 13,
+      "slug": "desafios-opcionais-e-estrelas",
+      "name": "Desafios opcionais, estrelas e objetivos secundários",
+      "req": "SW-112",
+      "priority": "P2",
+      "depends": "11,12,07"
+    },
+    {
+      "n": 14,
+      "slug": "sensores-programaveis",
+      "name": "Sensores independentes e regras visuais de automação",
+      "req": "SW-104",
+      "priority": "P2",
+      "depends": "01,05,06,11"
+    },
+    {
+      "n": 15,
+      "slug": "receitas-encadeadas-maquinas",
+      "name": "Múltiplas receitas e transformações encadeadas",
+      "req": "SW-105",
+      "priority": "P2",
+      "depends": "14,07"
+    },
+    {
+      "n": 16,
+      "slug": "buffers-armazenamento",
+      "name": "Buffers, filas e armazenamento intermediário",
+      "req": "SW-107",
+      "priority": "P2",
+      "depends": "15,05,06"
+    },
+    {
+      "n": 17,
+      "slug": "pedidos-dinamicos-production-shift",
+      "name": "Pedidos dinâmicos e adaptação automática de produção",
+      "req": "SW-106",
+      "priority": "P2",
+      "depends": "14,15,16"
+    },
+    {
+      "n": 18,
+      "slug": "blueprints-de-fabrica",
+      "name": "Projetos/blueprints de fábrica e reaproveitamento",
+      "req": "SW-113",
+      "priority": "P2",
+      "depends": "02,11,15,16"
+    },
+    {
+      "n": 19,
+      "slug": "sandbox-expandido",
+      "name": "Sandbox expandido e experimentação livre",
+      "req": "SW-114",
+      "priority": "P2",
+      "depends": "18,15,16,17"
+    },
+    {
+      "n": 20,
+      "slug": "desafios-de-eficiencia",
+      "name": "Desafios de eficiência, score e classificação local",
+      "req": "SW-115",
+      "priority": "P2",
+      "depends": "13,17,07"
+    },
+    {
+      "n": 21,
+      "slug": "polimento-ui-ux-acessibilidade",
+      "name": "Polimento global de gameplay, ajuda, feedback, câmera e resultados",
+      "req": "SW-206",
+      "priority": "P1",
+      "depends": "02..20 concluídas ou planejadas, 10,11"
+    },
+    {
+      "n": 22,
+      "slug": "qualidade-regressao-performance",
+      "name": "Auditoria final de regressão, determinismo, testes e performance",
+      "req": "SW-207 + validação SW-101..SW-206",
+      "priority": "P0 gate final",
+      "depends": "00..21 conforme escopo executado"
+    },
+    {
+      "n": 23,
+      "slug": "documentacao-release-e-consolidacao",
+      "name": "Consolidação SDD, release seguro e estratégia pós-jam",
+      "req": "todos os SW, documentação e publicação",
+      "priority": "P0/P2",
+      "depends": "22"
+    }
+  ],
+  "counts": {
+    "prompts": 24,
+    "requirements_main": 15,
+    "supplemental": 7
+  },
+  "original_reference": "GDD SHIFTWORKS v0.1 (historical; repo current docs take precedence)"
+}

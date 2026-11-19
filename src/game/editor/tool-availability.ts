@@ -1,4 +1,8 @@
-import type { EditableComponentType } from '../domain/component.model';
+import {
+  getInventoryCount,
+  type ComponentInventory,
+  type EditableComponentType,
+} from '../domain/component.model';
 import type { EditorMode } from '../domain/editor.model';
 
 export type EditorTool = 'SELECT' | EditableComponentType | 'REMOVE';
@@ -19,8 +23,8 @@ export function getToolAvailability(params: {
   tool: EditorTool;
   editorMode: EditorMode;
   unlimitedInventory: boolean;
-  inventory: Readonly<Record<EditableComponentType, number>>;
-  levelBudget: Readonly<Record<EditableComponentType, number>>;
+  inventory: ComponentInventory;
+  levelBudget: ComponentInventory;
 }): ToolAvailability {
   const { tool, editorMode, unlimitedInventory, inventory, levelBudget } = params;
 
@@ -33,7 +37,12 @@ export function getToolAvailability(params: {
       enabled: false,
       reason: 'Finish or exit the current run to edit',
       reasonKey: 'tools.finishRunToEdit',
-      remaining: tool === 'REMOVE' ? null : unlimitedInventory ? null : inventory[tool],
+      remaining:
+        tool === 'REMOVE'
+          ? null
+          : unlimitedInventory
+            ? null
+            : getInventoryCount(inventory, tool),
     };
   }
 
@@ -45,7 +54,7 @@ export function getToolAvailability(params: {
     return { enabled: true, reason: null, reasonKey: null, remaining: null };
   }
 
-  if (levelBudget[tool] <= 0) {
+  if (getInventoryCount(levelBudget, tool) <= 0) {
     return {
       enabled: false,
       reason: 'Not available in this level',
@@ -54,7 +63,7 @@ export function getToolAvailability(params: {
     };
   }
 
-  const remaining = inventory[tool];
+  const remaining = getInventoryCount(inventory, tool);
   if (remaining <= 0) {
     return {
       enabled: false,

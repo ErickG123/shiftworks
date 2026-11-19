@@ -1,6 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
-import { formatNumber, pluralize } from './formatters';
-import { I18nServiceImpl, LOCALE_STORAGE_KEY } from './i18n.service';
+import {
+  formatComponentType,
+  formatDiagnosticReason,
+  formatDirection,
+  formatItemType,
+  formatMachineMode,
+  formatNumber,
+  formatOutputName,
+  pluralize,
+} from './formatters';
+import { i18n, I18nServiceImpl, LOCALE_STORAGE_KEY } from './i18n.service';
 import { en } from './locales/en';
 import { ptBR } from './locales/pt-BR';
 
@@ -70,5 +79,36 @@ describe('I18nServiceImpl', () => {
     unsub();
     service.setLocale('pt-BR');
     expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  it('localizes item, component, direction, mode, and diagnostic labels without mutating internal IDs', () => {
+    const rawItem = 'BLUE_BLANK' as const;
+    const rawComp = 'CONVEYOR' as const;
+    const rawDir = 'E' as const;
+
+    i18n.setLocale('pt-BR');
+    expect(formatItemType(rawItem)).toBe('Bloco azul');
+    expect(formatItemType('CUT_PLATE')).toBe('Placa cortada');
+    expect(formatItemType('PRESSED_BLOCK')).toBe('Bloco prensado');
+    expect(formatComponentType(rawComp)).toBe('Esteira');
+    expect(formatComponentType('PROCESSOR')).toBe('Processador');
+    expect(formatComponentType('DIVERTER')).toBe('Desviador');
+    expect(formatDirection(rawDir)).toBe('Leste (E)');
+    expect(formatMachineMode('CUT')).toBe('CORTE');
+    expect(formatOutputName('dock')).toBe('Doca');
+    expect(formatDiagnosticReason('RULE_MISSING')).toContain('regra');
+
+    i18n.setLocale('en');
+    expect(formatItemType(rawItem)).toBe('Blue blank');
+    expect(formatComponentType(rawComp)).toBe('Conveyor');
+    expect(formatDirection(rawDir)).toBe('East (E)');
+    expect(formatMachineMode('CUT')).toBe('CUT');
+    expect(formatOutputName('dock')).toBe('Dock');
+
+    // Internal domain IDs remain untouched constants
+    expect(rawItem).toBe('BLUE_BLANK');
+    expect(rawComp).toBe('CONVEYOR');
+    expect(rawDir).toBe('E');
+    i18n.setLocale('pt-BR');
   });
 });

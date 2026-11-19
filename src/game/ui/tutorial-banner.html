@@ -1,5 +1,13 @@
-<div class="tutorial-card">
-  <strong id="tutorial-step-title"></strong>
-  <span id="tutorial-step-instruction"></span>
+<div class="tutorial-card" role="status" aria-live="polite">
+  <div class="tutorial-progress-dots" aria-hidden="true">
+    <span class="tutorial-dot" data-step-dot="0"></span>
+    <span class="tutorial-dot" data-step-dot="1"></span>
+    <span class="tutorial-dot" data-step-dot="2"></span>
+    <span class="tutorial-dot" data-step-dot="3"></span>
+  </div>
+  <div class="tutorial-text-group">
+    <strong id="tutorial-step-title"></strong>
+    <span id="tutorial-step-instruction"></span>
+  </div>
   <button type="button" id="skip-tutorial" data-i18n="common.skip"></button>
 </div>

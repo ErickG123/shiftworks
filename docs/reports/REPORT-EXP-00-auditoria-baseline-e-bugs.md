@@ -1,0 +1,42 @@
+# REPORT-EXP-00 — Auditoria do Estado Atual, Estabilização e Rastreabilidade
+
+- **Data:** 2026-11-18
+- **Status:** **CONCLUÍDO**
+- **Prompt / IDs atendidos:** `docs/expansion/prompts/00-auditoria-baseline-e-bugs.md` (`SW-207` + baseline de `SW-101..SW-115` e `SW-201..SW-206`)
+- **Baseline lida (`docs/reports`, `.agents`, GDD, ADRs):**
+  - `AGENTS.md`, `.agents/rules/*`, `.agents/skills/*`
+  - `docs/design/GDD.md`, `docs/requirements/REQUIREMENTS.md`, `docs/qa/TRACEABILITY.md`, `docs/architecture/OVERVIEW.md`, `SIMULATION-SEMANTICS.md`, `CONTRACTS.md`, `ADR-0001..ADR-0008`
+  - `docs/reports/REPORT-gameplay-controls-camera-level02-victory.md`
+  - `docs/expansion/README.md`, `docs/expansion/docs/00-PRINCIPIOS-E-REGRAS-EXECUCAO.md`, `docs/expansion/docs/01-MAPA-DE-REQUISITOS.md`, `docs/expansion/docs/05-MATRIZ-DE-TESTES-E-GATES.md`
+- **Estado anterior (bugs/compatibilidade):** Todos os 6 bugs críticos de baseline citados em `EXP-00` (`R` no tutorial, `PAUSED → EDITING`, `L02` sem esteiras, câmera/HUD, win-card lateral e `BLUE_BLANK`/`CONVEYOR` crus em `pt-BR`) já foram corrigidos e validados na estabilização imediatamente anterior (`REPORT-gameplay-controls-camera-level02-victory.md`). Nenhuma funcionalidade nova foi introduzida silenciosamente nesta fase.
+- **Evidências/caminhos de código examinados:**
+  - Domínio/simulação: `src/game/domain/*`, `src/game/simulation/*`
+  - Editor/interação: `src/game/editor/*`, `src/game/interaction/*`
+  - Renderização Three.js: `src/game/rendering/scene-manager.ts`, `camera-controller.ts`, `grid-view.ts`, `component-view.ts`, `item-view.ts`, `menu-diorama.ts`
+  - UI/i18n/persistência: `index.html`, `src/game/ui/*`, `src/i18n/*`, `src/game/persistence/storage-adapter.ts`
+- **Decisões de arquitetura/ADR:** Mantidas `ADR-0001..ADR-0008` vigentes. Novas decisões contratuais da expansão (`EXP-02..EXP-20`) reservadas à fase `EXP-01`.
+- **Implementação por lote (arquivo → alteração → requisito):**
+  - `docs/audits/AUDIT-EXP-00-auditoria-baseline-e-bugs.md` → criado diagnóstico real de baseline, verificação dos bugs históricos e inventário `SW-101..SW-207` → `SW-207`
+  - `docs/reports/REPORT-EXP-00-auditoria-baseline-e-bugs.md` → criado relatório oficial de fechamento da fase `EXP-00` → `SW-207`
+- **Migrações de dados / save / i18n:** Schema `shiftworks.game-state.v1` íntegro e coberto por `src/game/persistence/storage-adapter.test.ts`; paridade 100% `pt-BR`/`en` validada em `src/i18n/i18n.service.test.ts`.
+- **Comandos de validação e resultados REAIS:**
+  - `npm run lint` → **PASS** (`exit code 0`)
+  - `npm run typecheck` → **PASS** (`exit code 0`)
+  - `npm test` → **PASS** (`26` arquivos, `111` testes aprovados)
+  - `npm run test:fixtures` → **PASS** (`L01`: 30 ticks / 3★, `L02`: 68 ticks / 3★, `L03`: 70 ticks / 3★)
+  - `npm run build` → **PASS** (`51` módulos em `dist/`)
+  - `npm run test:e2e` → **PASS** (`10/10` testes Playwright em Chromium)
+- **Testes E2E e cenários manuais realizados:**
+  - `e2e/keyboard-ux.spec.ts` (T00 com `R`, câmera `WASD`/`Q/E` + raycast, bloqueio de foco em inputs/selects/modais)
+  - `e2e/l03-victory.spec.ts` (`L01` com `Start→Pause→Inspect→Edit`, overlay de vitória 3★, `L02` com Processor + esteiras, `L03` com Diverter)
+  - `e2e/responsive-ux.spec.ts` (`1024×768`, `1280×720`, `1600×900`, `1920×1080`, troca `pt-BR`/`en` e navegação `menu ↔ gameplay`)
+  - `e2e/sandbox.spec.ts` e `e2e/visual-audio.spec.ts`
+- **Capturas de interface (caminhos reais):**
+  - `artifacts/ux-1024x768.png`, `artifacts/ux-1280x720.png`, `artifacts/ux-1600x900.png`, `artifacts/ux-1920x1080.png`
+  - `artifacts/tutorial-t00-1280x720.png`, `artifacts/l02-gameplay-1280x900.png`, `artifacts/victory-overlay-1280x720.png`, `artifacts/l03-result-1280x900.png`
+- **Casos de aceite e pendências por ID:**
+  - `EXP-00` aceito integralmente (`SW-207` baseline verde).
+  - Nenhuma pendência bloqueante para iniciar `EXP-01`.
+- **Riscos/regressões remanescentes:**
+  - Risco de regressão no motor determinístico ao introduzir `EXP-02` (arrasto + Undo/Redo) e `EXP-05` (`+1 tick`), mitigado pela suíte de 111 testes unitários e fixtures de `L01–L03`.
+- **Gate para próxima fase:** **PASS — Liberado para executar `docs/expansion/prompts/01-especificacao-contratos-e-governanca.md` (`EXP-01`).**

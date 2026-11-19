@@ -1,0 +1,58 @@
+<div class="catalog-screen">
+  <div class="menu-card menu-card-wide catalog-card-shell">
+    <header class="level-select-header">
+      <div>
+        <p class="eyebrow" data-i18n="mainMenu.eyebrow"></p>
+        <h2 data-i18n="catalog.title"></h2>
+        <p class="level-select-subtitle" data-i18n="catalog.subtitle"></p>
+      </div>
+      <button type="button" id="catalog-back" data-i18n="common.back"></button>
+    </header>
+
+    <div class="catalog-toolbar">
+      <div class="catalog-tabs" role="tablist" aria-label="Catalog categories">
+        <button
+          type="button"
+          role="tab"
+          id="catalog-tab-machines"
+          data-catalog-tab="MACHINES"
+          aria-selected="true"
+          data-i18n="catalog.tabMachines"
+        ></button>
+        <button
+          type="button"
+          role="tab"
+          id="catalog-tab-resources"
+          data-catalog-tab="RESOURCES"
+          aria-selected="false"
+          data-i18n="catalog.tabResources"
+        ></button>
+      </div>
+
+      <div class="catalog-filters">
+        <input
+          type="search"
+          id="catalog-search"
+          class="catalog-search-input"
+          autocomplete="off"
+        />
+        <select id="catalog-status-filter" aria-label="Status filter">
+          <option value="ALL" data-i18n="catalog.filterAll"></option>
+          <option value="DISCOVERED" data-i18n="catalog.status.DISCOVERED"></option>
+          <option value="UNLOCKED" data-i18n="catalog.status.UNLOCKED"></option>
+          <option value="LOCKED" data-i18n="catalog.status.LOCKED"></option>
+        </select>
+        <select id="catalog-sort" aria-label="Sort order">
+          <option value="CAMPAIGN" data-i18n="catalog.sortCampaign"></option>
+          <option value="NAME" data-i18n="catalog.sortName"></option>
+          <option value="PROGRESS" data-i18n="catalog.sortProgress"></option>
+        </select>
+      </div>
+    </div>
+
+    <div class="catalog-body">
+      <div id="catalog-grid" class="catalog-grid" role="list"></div>
+      <aside id="catalog-detail" class="catalog-detail" aria-live="polite"></aside>
+    </div>
+  </div>
+</div>

@@ -14,8 +14,10 @@
 
 - Stack P0/P1: Vite + TypeScript estrito + Three.js + CSS modular; Vitest; Playwright quando aplicável. **Não substituir por Angular, React ou engine** sem ADR aprovada.
 - Separar TS, HTML e CSS quando houver templates/estilos; nada de markup ou CSS extensos dentro de `.ts`. Tipos de domínio em arquivos `*.model.ts`; usar discriminated unions e impedir `any` no domínio.
-- Simulação determinística pura, jamais acoplada a Three.js, GSAP, UI, áudio ou FPS.
-- Design modular, acessível, responsivo desktop, com suporte a tema escuro; sem emojis usados como ícones de UI. Usar SVG/Lucide licenciado ou geometria própria.
+- Simulação determinística pura, jamais acoplada a Three.js, GSAP, UI, áudio, câmera ou FPS.
+- Controles e ownership de eventos: `R` exclusivo para girar peça selecionada ou prévia (`ghost`) em `EDITING`; `WASD` (pan) e `Q/E` (rotação orbital de 90°) exclusivos do `CameraController`; atalhos bloqueados quando `input`, `select`, `textarea` ou modal (`[role="dialog"]`) estiverem em foco.
+- Máquina de estados de sessão (`EDITING` / `RUNNING` / `PAUSED` / `RESULT`): `PAUSED` permite inspeção somente leitura e destaca o CTA **Editar fábrica** para retornar a `EDITING` preservando o layout; sair de `GAMEPLAY` garante retorno seguro a `EDITING`.
+- Design modular, acessível, responsivo desktop (1024×768 a 1920×1080), com suporte a tema escuro e i18n completo (`pt-BR` e `en`) sem expor IDs técnicos internos (`BLUE_BLANK`, `CONVEYOR`, etc.) na UI; sem emojis usados como ícones de UI. Usar SVG/Lucide licenciado ou geometria própria.
 - Modificar apenas o escopo da fase; não antecipar P2/pós-jam.
 - Nenhuma exclusão/refatoração destrutiva sem auditoria e justificação; proteger dados e documentos existentes.
 - Não introduzir assets sem licença, telemetria ou login não previstos; registrar fontes/licenças quando necessário.

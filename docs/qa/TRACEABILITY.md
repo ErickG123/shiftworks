@@ -28,6 +28,10 @@
 - RF-019 e RNF-012 continuam PLANNED/BLOCKED: nenhum commit/remote público, upload, URL pública ou confirmação de submissão existe. O gate G16 exige evidência externa, registrada como pendência em `docs/reports/REPORT-PHASE-16-release.md`.
 - Build, lint, typecheck, 86 testes unitários e fixtures passaram. E2E não iniciou casos por erro do ambiente Playwright (`spawn EPERM`); portanto RNF-011/RNF-014 não são promovidos a VERIFIED.
 
+### Evidência de estabilização integrada (2026-11-18)
+
+- `RF-001/002/003`, `RF-004/005/006`, `RF-007/008/009`, `RF-010/011/012`, `RF-013/014`, `RF-015`, `RF-016`, `RF-017/018` e `RNF-001..010`, `RNF-013` verificados por `111` testes unitários/integrados (`26` arquivos Vitest, incluindo `camera-controller.test.ts`, `editor-interaction.test.ts`, `keyboard-shortcuts.test.ts`, `level-reference.test.ts`, `i18n.service.test.ts`) e `11` cenários E2E Playwright reais (`e2e/keyboard-ux.spec.ts`, `e2e/l03-victory.spec.ts`, `e2e/responsive-ux.spec.ts`, `e2e/sandbox.spec.ts`, `e2e/visual-audio.spec.ts`). Ver `docs/reports/REPORT-gameplay-controls-camera-level02-victory.md`.
+
 ## Processo de atualização
 
 1. Ao criar teste, acrescentar caminho do arquivo real e commit na linha correspondente.

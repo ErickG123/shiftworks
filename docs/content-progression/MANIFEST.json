@@ -1,0 +1,172 @@
+{
+  "package": "SHIFTWORKS-CONTENT-PROGRESSION-2.0",
+  "date": "2026-11-18",
+  "prompts": 23,
+  "levels_planned": 20,
+  "sectors": 5,
+  "equipment_count": 8,
+  "item_types_planned": 11,
+  "recipes_planned": 7,
+  "files": [
+    {
+      "path": "EXECUTAR-ORQUESTRACAO.md",
+      "bytes": 2849,
+      "sha256": "84ca54703e5649b727951e0a24b0549f8889f669dfc5aefbe81c03d76148359f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4133,
+      "sha256": "143cbe8fb4969f1e981ebe9a2fec73609428a97cfc0a1132bb816294ccd3beeb"
+    },
+    {
+      "path": "docs/00-GOVERNANCA-E-GATES.md",
+      "bytes": 2855,
+      "sha256": "b3928c0f2da3c7734136741be5f8ae8a0f8d1cae7929da63785864828e08e1be"
+    },
+    {
+      "path": "docs/01-CAMPANHA-20-FASES.md",
+      "bytes": 5073,
+      "sha256": "af7098456789241d974890528d410190ee145df073cafa579cbdcbb757a373cb"
+    },
+    {
+      "path": "docs/02-EQUIPAMENTOS-RECEITAS.md",
+      "bytes": 3263,
+      "sha256": "996c2b27ee8019b8a2355d290c1748f8b64e160d2a0218a04db19984aee994d8"
+    },
+    {
+      "path": "docs/03-PROGRESSAO-CONQUISTAS-E-PONTUACAO.md",
+      "bytes": 2483,
+      "sha256": "adc31a2880aeef23d55dce7081f626071f3875960ad4de6531cad18583c15691"
+    },
+    {
+      "path": "docs/04-TESTES-ACEITE-E-FIXTURES.md",
+      "bytes": 2582,
+      "sha256": "f29b0cf7e3b23125a1442400d250b599932a6c2e477ad36173b6640f90e6832d"
+    },
+    {
+      "path": "docs/05-ARQUITETURA-E-MIGRACAO.md",
+      "bytes": 2104,
+      "sha256": "9a7d39d67422ef5fbdd469c8f3de4723458ff6d9409b00115ff30b4dc54deb26"
+    },
+    {
+      "path": "prompts/00-auditoria-conteudo-e-integracoes.md",
+      "bytes": 6260,
+      "sha256": "d662a30c48600e609f54136506845797554c1bb0b70033305f65a39a5d7826eb"
+    },
+    {
+      "path": "prompts/01-contratos-campanha-e-arquitetura.md",
+      "bytes": 6359,
+      "sha256": "3fcaff0e7f403cf982f6c906905f448b9a3673a1824686c0f01d9ab739193f63"
+    },
+    {
+      "path": "prompts/02-schema-fases-solucionador-fixtures.md",
+      "bytes": 6353,
+      "sha256": "a85b654b135e8fff6161eb47e46cc4735a496247fca5a1e16b33d0f02709458a"
+    },
+    {
+      "path": "prompts/03-integracao-equipamentos-render-ui.md",
+      "bytes": 6340,
+      "sha256": "1576fbdd97441c65fff3eb1189eb7ad25dc7fafb7745747ff31585c7ade3607f"
+    },
+    {
+      "path": "prompts/04-buffer-fifo-jogavel.md",
+      "bytes": 5953,
+      "sha256": "b939fb6838446ba1e6b9e34ce68fb3ea4571b80cf987ff9c82d41d8222db8634"
+    },
+    {
+      "path": "prompts/05-sensor-programavel-jogavel.md",
+      "bytes": 6089,
+      "sha256": "6505d6deb43708c0bc202ab84081ae44002033966e171d8c4fd2461c9d038a85"
+    },
+    {
+      "path": "prompts/06-splitter-com-duas-saidas.md",
+      "bytes": 6050,
+      "sha256": "477374358f61f380c553ca95035c8dd58a64dbf951ca27022eccfb1f26656692"
+    },
+    {
+      "path": "prompts/07-merger-arbitragem-fluxos.md",
+      "bytes": 5983,
+      "sha256": "4c61ac0cb7ae77415a658c8d7dc9857bdbf61e534f60d1d889ba773d1b7f8613"
+    },
+    {
+      "path": "prompts/08-itens-receitas-e-cadeias.md",
+      "bytes": 6463,
+      "sha256": "62b61643b7cafca351fc5fe9d71734c5bda06fd7d2ca40dc8ce77357e57c485b"
+    },
+    {
+      "path": "prompts/09-assembler-dois-insumos.md",
+      "bytes": 6084,
+      "sha256": "5bdf15c0438b2318971d7beefea22d787e3032fc5f0fab19404dd07a4021298a"
+    },
+    {
+      "path": "prompts/10-catalogo-ajuda-3d-educativo.md",
+      "bytes": 6253,
+      "sha256": "605d413c5fa79a510b485a2dbd7a6bb5e3e4adfe0364de224ef4b7086ffd6eb1"
+    },
+    {
+      "path": "prompts/11-desbloqueios-estrelas-conquistas.md",
+      "bytes": 6680,
+      "sha256": "53d2264459f9dcd36e7184a148d5fd38a49e8e0cb2362b28e23d06e91bff932e"
+    },
+    {
+      "path": "prompts/12-fase-l04-integracao-fundamentos.md",
+      "bytes": 6009,
+      "sha256": "f6b25a3036f172a552a6654931fb6a2c27452583d64cf67e03900cb83e232536"
+    },
+    {
+      "path": "prompts/13-fases-l05-l08-eficiencia.md",
+      "bytes": 6239,
+      "sha256": "0c0d61d6ac8105ddef4bdcece32763e80255e94ca7b7ed7b43e9d751a0d5dc1a"
+    },
+    {
+      "path": "prompts/14-fases-l09-l12-automacao-inteligente.md",
+      "bytes": 6032,
+      "sha256": "76d98ad98069a46d3949436e6f520aefbb68f92f176473241a427657863c41bb"
+    },
+    {
+      "path": "prompts/15-fases-l13-l16-producao-avancada.md",
+      "bytes": 6146,
+      "sha256": "1bcabbc40d2e3ecc32c34d592a9911919be91af442c8f35f8188c8c652f9cfa0"
+    },
+    {
+      "path": "prompts/16-fases-l17-l20-turnos-dinamicos.md",
+      "bytes": 6247,
+      "sha256": "ab2398892a5ceb5984d4703bcd8fd8cc76882c42627c2519b36e41b34c5ac14c"
+    },
+    {
+      "path": "prompts/17-redesign-selecao-setores.md",
+      "bytes": 6193,
+      "sha256": "8d04bbe1329159431cb1e5379e16ff1c0cb9bc16e87b8115b20823384260aaba"
+    },
+    {
+      "path": "prompts/18-tutoriais-interativos-por-equipamento.md",
+      "bytes": 6263,
+      "sha256": "d96660e7ab7d1bc81386c160bd1cd9a090ab4b9de8dceae010560b8a213ca797"
+    },
+    {
+      "path": "prompts/19-sandbox-e-blueprints-conteudo.md",
+      "bytes": 6099,
+      "sha256": "11486d7c87189187e5f73bdcd4dcfa7d345a8bc7e43dcbeb2c8c42d9108683ed"
+    },
+    {
+      "path": "prompts/20-balanceamento-e-playtest.md",
+      "bytes": 6302,
+      "sha256": "9b6003643a381205e405f71af32e2cab124cd821e0ad64237eea75da054ce408"
+    },
+    {
+      "path": "prompts/21-qa-integracao-fixtures-e2e.md",
+      "bytes": 6331,
+      "sha256": "ac10691ae715b9d02532c9edf04142870272d2e5f9c6ab660e1edf1ea4d133c8"
+    },
+    {
+      "path": "prompts/22-documentacao-release-e-entrega.md",
+      "bytes": 6419,
+      "sha256": "c98f0603ba071d4b06e20ade3615343f0d69f533814d0eb7e75b501cad9d88e1"
+    },
+    {
+      "path": "templates/REPORT-CNT-TEMPLATE.md",
+      "bytes": 816,
+      "sha256": "1f24333f1ec3a7405081bf0bc498e8af8243733ba1881c321b7b3d4f8294c303"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ test('Sandbox reuses the factory and remains playable when localStorage is block
   await page.locator('#menu-language-select').selectOption('en');
   await page.locator('#menu-continue').click();
   await expect(page.locator('#game-mode-select')).toHaveValue('CAMPAIGN');
+  await page.locator('[data-inspector-tab="resources"]').click();
   await expect(page.locator('#storage-status')).toBeVisible();
   await page.reload();
   await page.locator('#menu-language-select').selectOption('en');
@@ -19,7 +20,9 @@ test('Sandbox reuses the factory and remains playable when localStorage is block
   await expect(page.locator('#game-mode-select')).toHaveValue('CAMPAIGN');
   await page.locator('#game-mode-select').selectOption('SANDBOX');
   await expect(page.locator('#sandbox-controls')).toBeVisible();
+  await page.locator('[data-inspector-tab="resources"]').click();
   await expect(page.locator('#inventory')).toContainText('Unlimited');
+  await page.locator('[data-inspector-tab="objective"]').click();
   await expect(page.locator('#goal-status')).toContainText('Output counts:');
 
   page.once('dialog', (dialog) => dialog.accept());
