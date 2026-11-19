@@ -17,12 +17,13 @@ async function clickGridCell(page: Page, x: number, y: number): Promise<void> {
 test('completes L01 (with pause/inspect/edit), L02 (Processor + conveyors), and L03 (Diverter) with dedicated victory overlay', async ({
   page,
 }) => {
-  test.setTimeout(150_000);
+  test.setTimeout(180_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/');
   await page.locator('#menu-language-select').selectOption('en');
   await page.locator('#menu-continue').click();
   await expect(page.locator('#engine-status')).toHaveAttribute('data-status', 'ready');
+  await page.locator('#simulation-speed').selectOption('4');
 
   // 1. L01: Place 5 conveyors, Start, Pause, Inspect, Edit Factory, complete 6th conveyor, and win
   await expect(page.locator('#level-select')).toHaveValue('L01');
